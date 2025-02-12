@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+application-local.properties
+original.pem
+private.key
+keystore.p12
