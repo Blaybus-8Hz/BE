@@ -4,6 +4,7 @@ package com.haertz.be.auth.controller;
 import com.haertz.be.auth.dto.response.AccountTokenDto;
 import com.haertz.be.auth.dto.response.IdTokenDto;
 import com.haertz.be.auth.usecase.LoginUseCase;
+import com.haertz.be.auth.usecase.LogoutUseCase;
 import com.haertz.be.auth.usecase.RequestTokenUseCase;
 import com.haertz.be.auth.usecase.SignUpUseCase;
 import com.haertz.be.common.response.SuccessResponse;
@@ -23,6 +24,7 @@ public class AuthController {
     private final RequestTokenUseCase requestTokenUseCase;
     private final SignUpUseCase signUpUseCase;
     private final LoginUseCase loginUseCase;
+    private  final LogoutUseCase logoutUseCase;
 
     @Operation(summary = "구글 id token을 발급받습니다.")
     @GetMapping("/idtoken")
@@ -47,6 +49,14 @@ public class AuthController {
         AccountTokenDto accountTokenDto = loginUseCase.execute(loginType, TokenUtils.resolveToken(request), response);
         return SuccessResponse.of(accountTokenDto);
     }
+    @Operation(summary = "로그아웃 합니다. *access token 이용*")
+    @PostMapping("/logout")
+    public SuccessResponse<Void> logout(HttpServletRequest request, HttpServletResponse response){
+        logoutUseCase.execute(TokenUtils.resolveToken(request), response);
+        return SuccessResponse.empty();
+    }
+
+
 
 
 }
