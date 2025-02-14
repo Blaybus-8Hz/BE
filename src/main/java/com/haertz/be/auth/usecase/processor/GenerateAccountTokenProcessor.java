@@ -29,4 +29,14 @@ public class GenerateAccountTokenProcessor {
         return AccountTokenDto.of(accessToken);
     }
 
+    // [유저와 리프레쉬 토큰]을 받아서, 액세스 토큰을 만들고, AccountTokenDto을 만든다.
+    public AccountTokenDto refreshToken(User user, String refreshToken, HttpServletResponse response){
+        String accessToken = jwtProvider.generateToken(user.getUserId(),user.getAuthInfo().getRole().getValue(),ACCESS_TOKEN);
+
+        refreshTokenRedisService.save(user.getUserId(), refreshToken); // redis refreshToken exp 갱신
+        cookieProcessor.setRefreshTokenCookie(response, refreshToken);
+
+        return AccountTokenDto.of(accessToken);
+
+    }
 }
