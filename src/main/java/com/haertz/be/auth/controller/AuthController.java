@@ -3,10 +3,7 @@ package com.haertz.be.auth.controller;
 
 import com.haertz.be.auth.dto.response.AccountTokenDto;
 import com.haertz.be.auth.dto.response.IdTokenDto;
-import com.haertz.be.auth.usecase.LoginUseCase;
-import com.haertz.be.auth.usecase.LogoutUseCase;
-import com.haertz.be.auth.usecase.RequestTokenUseCase;
-import com.haertz.be.auth.usecase.SignUpUseCase;
+import com.haertz.be.auth.usecase.*;
 import com.haertz.be.common.response.SuccessResponse;
 import com.haertz.be.common.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +21,8 @@ public class AuthController {
     private final RequestTokenUseCase requestTokenUseCase;
     private final SignUpUseCase signUpUseCase;
     private final LoginUseCase loginUseCase;
-    private  final LogoutUseCase logoutUseCase;
+    private final LogoutUseCase logoutUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
     @Operation(summary = "구글 id token을 발급받습니다.")
     @GetMapping("/idtoken")
@@ -49,6 +47,7 @@ public class AuthController {
         AccountTokenDto accountTokenDto = loginUseCase.execute(loginType, TokenUtils.resolveToken(request), response);
         return SuccessResponse.of(accountTokenDto);
     }
+
     @Operation(summary = "로그아웃 합니다. *access token 이용*")
     @PostMapping("/logout")
     public SuccessResponse<Void> logout(HttpServletRequest request, HttpServletResponse response){
@@ -56,7 +55,11 @@ public class AuthController {
         return SuccessResponse.empty();
     }
 
-
-
+    @Operation(summary = "refresh token으로 access token을 재발급합니다. *refresh token 이용*")
+    @PostMapping("/refresh")
+    public SuccessResponse<Object> refreshToken(@CookieValue(value = "refreshToken") String refreshToken, HttpServletResponse response) {
+        AccountTokenDto accountTokenDto = refreshTokenUseCase.execute(refreshToken, response);
+        return SuccessResponse.of(accountTokenDto);
+    }
 
 }
