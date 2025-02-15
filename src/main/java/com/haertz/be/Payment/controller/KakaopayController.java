@@ -5,20 +5,23 @@ import com.haertz.be.payment.dto.KakaoPayApproveRequestDto;
 import com.haertz.be.payment.dto.KakaoPayDto;
 import com.haertz.be.payment.dto.KakaoPayRequestDto;
 import com.haertz.be.payment.Service.KakaoPayService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//@Tag(name="카카오페이 api",description="카카오페이api 결제 연동을 위한 API")
+@Tag(name = "카카오 페이 APT", description = "카카오페이 결제 연동을 위한 API입니다.")
 @RestController
 @Log
 public class KakaopayController {
     @Autowired
     private KakaoPayService kakaoPayService;
 
-    @PostMapping("/api/kakaoPay") //?post?get?
+    @Operation(summary = "카카오페이 결제 요청을 보냅니다.")
+    @PostMapping("/api/kakaoPay")
     public ResponseEntity<KakaoPayDto> kakaoPayGet(@RequestBody KakaoPayRequestDto requestDTO){
         log.info("결제하기 버튼 클릭 시 카카오페이 결제 요청");
 
@@ -33,6 +36,7 @@ public class KakaopayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+    @Operation(summary = "카카오페이 결제 승인요청을 보냅니다.")
     @PostMapping("/api/kakaoPay/approve")
     public ResponseEntity<KakaoPayApproveDto> kakaoPayApprove(@RequestBody KakaoPayApproveRequestDto requestDTO){
         //log.info("카카오페이 결제 승인요청:{}",requestDTO.getTid());
