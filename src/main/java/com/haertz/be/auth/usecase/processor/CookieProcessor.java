@@ -16,7 +16,7 @@ public class CookieProcessor {
         refreshTokenCookie.setHttpOnly(true); // xss 공격 방어
         refreshTokenCookie.setSecure(false); // 추후 true로 변경
         refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(jwtProperties.getRefreshTokenExp());
+        refreshTokenCookie.setMaxAge(Math.toIntExact(jwtProperties.getRefreshTokenExp()));
         response.addCookie(refreshTokenCookie);
     }
 
