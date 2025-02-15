@@ -1,9 +1,9 @@
-package com.haertz.be.Payment.Service;
+package com.haertz.be.payment.Service;
 
-import com.haertz.be.Payment.DTO.KakaoPayApproveDTO;
-import com.haertz.be.Payment.DTO.KakaoPayApproveRequestDTO;
-import com.haertz.be.Payment.DTO.KakaoPayDTO;
-import com.haertz.be.Payment.DTO.KakaoPayRequestDTO;
+import com.haertz.be.payment.dto.KakaoPayApproveDto;
+import com.haertz.be.payment.dto.KakaoPayApproveRequestDto;
+import com.haertz.be.payment.dto.KakaoPayDto;
+import com.haertz.be.payment.dto.KakaoPayRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,21 +22,21 @@ import java.util.Map;
 @Slf4j
 public class KakaoPayService {
     private static final String Host = "https://open-api.kakaopay.com/online";
-    @Value("${kakao.pay.kakaoAdminKey}")
+    @Value("${KAKAOADMIN_KEY}")
     private String kakaoAdminKey;
     //프론트가 배포 한 주소로 설정하기, 사용자가 결제완료 버튼을 누르면 ex.approvalurl(성공시)로 리디렉트되고 이때 pg_token이 포함되어있음,이 토큰 받아 api/kakapay/approve로 요청보내면 됨.
-    @Value("${kakao.pay.approveUrl}")
+    @Value("${APPROVE_URL}")
     private String approveUrl;
-    @Value("${kakao.pay.cancelUrl}")
+    @Value("${CANCEL_URL}")
     private String cancelUrl;
-    @Value("${kakao.pay.failUrl}")
+    @Value("${FAIL_URL}")
     private String failUrl;
 
-    private KakaoPayDTO kakaoPayDTO;
+    private KakaoPayDto kakaoPayDTO;
     private String cid = "TC0ONETIME"; //가맹점용 코드(테스트용)
     private final RestTemplate restTemplate= new RestTemplate();
 
-    public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
+    public KakaoPayDto kakaoPayReady(KakaoPayRequestDto requestDTO) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -55,7 +55,7 @@ public class KakaoPayService {
         //헤더와 바디 붙이기
         HttpEntity<Map<String,Object>>body = new HttpEntity<>(parameters, headers);
         try {
-            kakaoPayDTO = restTemplate.postForObject(new URI(Host + "/v1/payment/ready"), body, KakaoPayDTO.class);
+            kakaoPayDTO = restTemplate.postForObject(new URI(Host + "/v1/payment/ready"), body, KakaoPayDto.class);
             log.info("카카오페이 요청 성공:{}}", kakaoPayDTO);
             return kakaoPayDTO;
         } catch (RestClientException | URISyntaxException e) {
@@ -63,7 +63,7 @@ public class KakaoPayService {
             return null;
         }
     }
-    public KakaoPayApproveDTO kakaoPayApprove(KakaoPayApproveRequestDTO requestDTO) {
+    public KakaoPayApproveDto kakaoPayApprove(KakaoPayApproveRequestDto requestDTO) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -77,8 +77,8 @@ public class KakaoPayService {
 
         HttpEntity<Map<String, Object>> body = new HttpEntity<>(parameters, headers);
         try {
-            KakaoPayApproveDTO approveResponse = restTemplate.postForObject(
-                    new URI(Host + "/v1/payment/approve"), body, KakaoPayApproveDTO.class);
+            KakaoPayApproveDto approveResponse = restTemplate.postForObject(
+                    new URI(Host + "/v1/payment/approve"), body, KakaoPayApproveDto.class);
             log.info("결제 승인 응답: {}", approveResponse);
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {

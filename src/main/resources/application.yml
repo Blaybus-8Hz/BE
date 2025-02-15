@@ -38,6 +38,13 @@ spring:
       password: ${REDIS_PASSWORD}
       database: 1
 
+  kakao:
+    pay:
+      kakaoAdminKey: ${KAKAOADMIN_KEY}
+      approveUrl: ${APPROVE_URL}
+      cancelUrl: ${CANCEL_URL}
+      failUrl: ${FAIL_URL}
+
 jwt:
   secret-key: ${JWT_SECRET}
   access-token-exp: ${JWT_ACCESS_EXP}
