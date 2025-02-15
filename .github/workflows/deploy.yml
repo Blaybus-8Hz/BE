@@ -50,11 +50,8 @@ jobs:
             sudo touch docker-compose.yml 
              echo "${{ secrets.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
 
-            sudo chmod 666 /var/run/docker.sock 
-            
-            sudo docker stop $(sudo docker ps -q) || true
-            sudo docker rm $(sudo docker ps -qa) || true
-            sudo docker image prune -af || true
-            
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }} 
-            docker-compose up -d --remove-orphans
+            sudo chmod 666 /var/run/docker.sock
+            sudo docker ps -qa | xargs -r sudo docker rm -f
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
+            docker-compose -f docker-compose.yml --env-file ./.env up -d
+            docker image prune -f
