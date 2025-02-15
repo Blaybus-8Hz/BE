@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "카카오 페이 APT", description = "카카오페이 결제 연동을 위한 API입니다.")
+@Tag(name = "카카오 페이 API", description = "카카오페이 결제 연동을 위한 API입니다.")
 @RestController
 @Log
 public class KakaopayController {
