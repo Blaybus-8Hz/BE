@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
+@Table(name = "payment")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,10 +18,6 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="payment_id") //DB에서 자동 생성되는 PK 값
     private Long paymentId;
-
-    //Reservation table과 일대일관계
-    @Column(nullable = false,name="reservation_id")
-    private Long reservationId;
 
     /* Reservation entity생성후 변경
     @OneToOne(cascade = CascadeType.ALL)
@@ -44,9 +41,9 @@ public class Payment {
     @Column(nullable = false,name="payment_status")
     private PaymentStatus paymentStatus=PaymentStatus.PENDING;
 
-    @Column(nullable = false,name="partner_order_id") //외부 결제 서비스(카카오페이)에서 사용되는 주문 ID.
+    @Column(name="partner_order_id") //외부 결제 서비스(카카오페이)에서 사용되는 주문 ID.
     private String partnerOrderId;
 
-    @Column(nullable = false,name="payment_transaction") //카카오페이의 tid
+    @Column(name="payment_transaction") //카카오페이의 tid
     private String paymentTransaction;
 }

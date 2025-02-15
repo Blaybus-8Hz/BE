@@ -1,19 +1,21 @@
 package com.haertz.be.payment.Service;
 
-import com.haertz.be.payment.dto.KakaoPayApproveDto;
-import com.haertz.be.payment.dto.KakaoPayApproveRequestDto;
-import com.haertz.be.payment.dto.KakaoPayDto;
-import com.haertz.be.payment.dto.KakaoPayRequestDto;
+import com.haertz.be.payment.dto.*;
+import com.haertz.be.payment.entity.PaymentMethod;
+import com.haertz.be.payment.entity.PaymentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +37,8 @@ public class KakaoPayService {
     private KakaoPayDto kakaoPayDTO;
     private String cid = "TC0ONETIME"; //가맹점용 코드(테스트용)
     private final RestTemplate restTemplate= new RestTemplate();
+    @Autowired
+    private PaymentSaveService paymentSaveService;
 
     public KakaoPayDto kakaoPayReady(KakaoPayRequestDto requestDTO) {
         HttpHeaders headers = new HttpHeaders();
@@ -80,6 +84,17 @@ public class KakaoPayService {
             KakaoPayApproveDto approveResponse = restTemplate.postForObject(
                     new URI(Host + "/v1/payment/approve"), body, KakaoPayApproveDto.class);
             log.info("결제 승인 응답: {}", approveResponse);
+
+            /*아래 로직 추가 구현 필요
+            1. 결제 내역 저장위한 dto 설정
+            PaymentSaveDto paymentSaveDto = new PaymentSaveDto();
+            ...
+            paymentSaveDto.setPaymentMethod(PaymentMethod.KAKAO_PAY);
+            paymentSaveDto.setPaymentDate(new Date());
+            paymentSaveDto.setPaymentStatus(PaymentStatus.COMPLETED);
+            2.결제내역 저장
+            paymentSaveService.savePayment(paymentSaveDto);
+            */
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 승인 실패", e);
