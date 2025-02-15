@@ -1,10 +1,11 @@
 package com.haertz.be.common.jwt.properties;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+
+@Component
 @Getter
 public class JwtProperties {
 
