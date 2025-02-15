@@ -43,15 +43,13 @@ jobs:
           key: ${{ secrets.SECRET_KEY }}
           script: |
             cd /home/ubuntu/ 
-            
-            sudo touch .env  
-            echo "${{ secrets.ENV_VARS }}" | sudo tee .env > /dev/null 
-
-            sudo touch docker-compose.yml 
-             echo "${{ secrets.DOCKER_COMPOSE }}" | sudo tee docker-compose.yml > /dev/null
-
+          
+            sudo mkdir -p /home/ubuntu/app/config
+            sudo touch /home/ubuntu/app/config/application.yml
+            echo "${{ secrets.APPLICATION }}" | sudo tee /home/ubuntu/app/config/application.yml > /dev/null
+        
             sudo chmod 666 /var/run/docker.sock
             sudo docker ps -qa | xargs -r sudo docker rm -f
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
-            docker-compose -f docker-compose.yml --env-file ./.env up -d
+            docker-compose -f /home/ubuntu/app/docker-compose.yml up -d
             docker image prune -f
