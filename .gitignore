@@ -8,6 +8,7 @@ build/
 ### 8HERTZ ###
 **/.env
 **/docker-compose.yml
+/src/main/resources/application.yml
 
 ### STS ###
 .apt_generated
