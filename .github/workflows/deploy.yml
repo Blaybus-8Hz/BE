@@ -30,8 +30,8 @@ jobs:
 
       - name: Docker Image Build and Push
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_SERVER }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_SERVER }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
