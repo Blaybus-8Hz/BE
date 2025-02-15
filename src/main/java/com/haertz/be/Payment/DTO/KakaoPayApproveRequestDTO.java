@@ -1,4 +1,4 @@
-package com.haertz.be.Payment.DTO;
+package com.haertz.be.payment.dto;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class KakaoPayApproveRequestDTO {
+public class KakaoPayApproveRequestDto {
     private String tid;
     private String partner_order_id;
     private String partner_user_id;

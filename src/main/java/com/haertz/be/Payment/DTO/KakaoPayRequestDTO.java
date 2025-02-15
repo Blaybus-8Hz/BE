@@ -1,4 +1,4 @@
-package com.haertz.be.Payment.DTO;
+package com.haertz.be.payment.dto;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class KakaoPayRequestDTO {
+public class KakaoPayRequestDto {
     //예약을 결제 완료 시점에 디비에 저장하는경우
     //private int cid;
     private String partner_order_id; //기멩점 주문번호

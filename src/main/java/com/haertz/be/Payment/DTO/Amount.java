@@ -1,4 +1,4 @@
-package com.haertz.be.Payment.DTO;
+package com.haertz.be.payment.dto;
 
 import lombok.*;
 

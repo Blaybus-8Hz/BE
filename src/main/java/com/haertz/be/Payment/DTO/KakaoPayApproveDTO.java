@@ -1,4 +1,4 @@
-package com.haertz.be.Payment.DTO;
+package com.haertz.be.payment.dto;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class KakaoPayApproveDTO {
+public class KakaoPayApproveDto {
     //임시로 카카오페이api에서 반환하는 정보 모두 response에 포함.
     private String aid; //결제 고유번호
     private String tid; //결제 거래번호
