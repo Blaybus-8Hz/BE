@@ -42,14 +42,18 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SECRET_KEY }}
           script: |
-            cd /home/ubuntu/ 
-          
-            sudo mkdir -p /home/ubuntu/app/config
-            sudo touch /home/ubuntu/app/config/application.yml
-            echo "${{ secrets.APPLICATION }}" | sudo tee /home/ubuntu/app/config/application.yml > /dev/null
-        
+            cd /home/ubuntu/
+
+            sudo mkdir -p ./src/main/resources
+            sudo touch ./src/main/resources/application.yml
+            echo "${{ secrets.APPLICATION }}" | sudo tee ./src/main/resources/application.yml > /dev/null
+            cat ./src/main/resources/application.yml
+
+            sudo touch ./docker-compose.yml
+            echo "${{ secrets.DOCKER_COMPOSE }}" | sudo tee ./docker-compose.yml > /dev/null
+
             sudo chmod 666 /var/run/docker.sock
             sudo docker ps -qa | xargs -r sudo docker rm -f
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
-            docker-compose -f /home/ubuntu/app/docker-compose.yml up -d
+            docker-compose -f ./docker-compose.yml --env-file ./src/main/resources/application.yml up -d
             docker image prune -f
