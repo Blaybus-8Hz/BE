@@ -14,14 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserAdaptor {
     private final UserRepository userRepository;
-
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new BaseException(UserErrorCode.USER_NOT_FOUND));
-    }
-
     public User findByEmail(String email) {
         return userRepository.findByAuthInfoEmail(email)
+                .orElseThrow(() -> new BaseException(UserErrorCode.USER_NOT_FOUND));
+    }
+    public User findById(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new BaseException(UserErrorCode.USER_NOT_FOUND));
     }
 
