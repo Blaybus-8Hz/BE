@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: checkout
         uses: actions/checkout@v3
 
       - name: Set up JDK 17
@@ -31,15 +32,15 @@ jobs:
 
       - name: Docker Image Build and Push
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_SERVER }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_SERVER }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.SECRET_KEY }}
           script: |
             cd /home/ubuntu/ 
             
@@ -55,5 +56,5 @@ jobs:
             sudo docker rm $(sudo docker ps -qa) || true
             sudo docker image prune -af || true
             
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_SERVER }} 
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }} 
             docker-compose up -d --remove-orphans
