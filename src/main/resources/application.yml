@@ -38,6 +38,15 @@ spring:
       password: ${REDIS_PASSWORD}
       database: 1
 
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
+
 jwt:
   secret-key: ${JWT_SECRET}
   access-token-exp: ${JWT_ACCESS_EXP}
