@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 public enum PaymentErrorCode implements BaseErrorCode {
     INVALID_PAYMENT_REQUEST(400, "PAYMENT_400", "잘못된 결제 요청입니다."),
     PAYMENT_NOT_FOUND(404, "PAYMENT_404", "결제 내역을 찾을 수 없습니다."),
-    INSUFFICIENT_FUNDS(402, "PAYMENT_402", "잔액이 부족합니다."),
     PAYMENT_PROCESSING_ERROR(500, "PAYMENT_500", "결제 처리 중 오류가 발생했습니다.");
 
     private final int httpStatus;
