@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class KakaoPayApproveDto {
+    private String googleMeetingLink;
     //임시로 카카오페이api에서 반환하는 정보 모두 response에 포함.
     private String aid; //결제 고유번호
     private String tid; //결제 거래번호
