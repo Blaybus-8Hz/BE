@@ -46,23 +46,23 @@ public class JwtProvider {
     public String generateToken(Long userId, String role, String type) {
         Date now = new Date();
         Long exp = 0L;
+
         if (type.equalsIgnoreCase(ACCESS_TOKEN)) {
             exp = jwtProperties.getAccessTokenExp();
         } else if (type.equalsIgnoreCase(REFRESH_TOKEN)) {
             exp = jwtProperties.getRefreshTokenExp();
         }
-
         return Jwts.builder()
-                .issuer("RouteFinders")
+                .issuer("Blaybus")
                 .subject(userId.toString())
                 .issuedAt(now)
-                .expiration(new Date(now.getTime() + exp))
+                .expiration(new Date(now.getTime() + (exp * 1000)))
                 .claim("type", type)
                 .claim("role", role)
                 .signWith(getSecretKey())
                 .compact();
-
     }
+
 
     // 토큰 검증하는 함수
     public boolean validateToken(String token) {
