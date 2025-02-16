@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RequestTokenUseCase {
     private final GoogleOauthProcessor googleOauthProcessor;
-
     public IdTokenDto execute(String loginType, String code) {
         if (loginType.equals("google")) {
             GoogleTokenResponse googleTokenResponse = googleOauthProcessor.getOauthToken(code);

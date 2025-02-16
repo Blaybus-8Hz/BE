@@ -45,7 +45,7 @@ public class JwtProvider {
     //access , refresh token 만드는 함수
     public String generateToken(Long userId, String role, String type) {
         Date now = new Date();
-        int exp = 0;
+        Long exp = 0L;
         if (type.equalsIgnoreCase(ACCESS_TOKEN)) {
             exp = jwtProperties.getAccessTokenExp();
         } else if (type.equalsIgnoreCase(REFRESH_TOKEN)) {
