@@ -38,6 +38,13 @@ spring:
       password: ${REDIS_PASSWORD}
       database: 1
 
+  kakao:
+    pay:
+      kakaoAdminKey: ${KAKAOADMIN_KEY}
+      approveUrl: ${APPROVE_URL}
+      cancelUrl: ${CANCEL_URL}
+      failUrl: ${FAIL_URL}
+
   management:
     endpoints:
       web:
