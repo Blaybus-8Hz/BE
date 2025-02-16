@@ -1,8 +1,10 @@
 package com.haertz.be.payment.Service;
 
+import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.dto.*;
 import com.haertz.be.payment.entity.PaymentMethod;
 import com.haertz.be.payment.entity.PaymentStatus;
+import com.haertz.be.payment.exception.PaymentErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +105,7 @@ public class KakaoPayService {
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 승인 실패", e);
-            return null;
+            throw new BaseException(PaymentErrorCode.PAYMENT_PROCESSING_ERROR);
         }
     }
 }
