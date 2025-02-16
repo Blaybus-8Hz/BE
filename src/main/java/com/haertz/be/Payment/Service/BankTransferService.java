@@ -1,6 +1,5 @@
-package com.haertz.be.payment.Service;
+package com.haertz.be.payment.service;
 
-import com.haertz.be.common.exception.GlobalErrorCode;
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.dto.BankTransferDto;
 import com.haertz.be.payment.dto.BankTransferRequestDto;
@@ -9,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Service

@@ -1,6 +1,6 @@
 package com.haertz.be.payment.controller;
 
-import com.haertz.be.payment.Service.BankTransferService;
+import com.haertz.be.payment.service.BankTransferService;
 import com.haertz.be.payment.dto.BankTransferDto;
 import com.haertz.be.payment.dto.BankTransferRequestDto;
 import io.swagger.v3.oas.annotations.Operation;

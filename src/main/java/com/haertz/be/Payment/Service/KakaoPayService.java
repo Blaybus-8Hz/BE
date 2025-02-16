@@ -1,8 +1,6 @@
-package com.haertz.be.payment.Service;
+package com.haertz.be.payment.service;
 
 import com.haertz.be.payment.dto.*;
-import com.haertz.be.payment.entity.PaymentMethod;
-import com.haertz.be.payment.entity.PaymentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

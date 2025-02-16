@@ -4,7 +4,7 @@ import com.haertz.be.payment.dto.KakaoPayApproveDto;
 import com.haertz.be.payment.dto.KakaoPayApproveRequestDto;
 import com.haertz.be.payment.dto.KakaoPayDto;
 import com.haertz.be.payment.dto.KakaoPayRequestDto;
-import com.haertz.be.payment.Service.KakaoPayService;
+import com.haertz.be.payment.service.KakaoPayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.java.Log;

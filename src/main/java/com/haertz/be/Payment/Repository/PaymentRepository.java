@@ -1,4 +1,4 @@
-package com.haertz.be.payment.Repository;
+package com.haertz.be.payment.repository;
 
 import com.haertz.be.payment.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;

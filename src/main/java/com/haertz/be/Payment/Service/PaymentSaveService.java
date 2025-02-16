@@ -1,15 +1,12 @@
-package com.haertz.be.payment.Service;
+package com.haertz.be.payment.service;
 
-import com.haertz.be.payment.Repository.PaymentRepository;
+import com.haertz.be.payment.repository.PaymentRepository;
 import com.haertz.be.payment.dto.PaymentSaveDto;
 import com.haertz.be.payment.entity.Payment;
-import com.haertz.be.payment.entity.PaymentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
