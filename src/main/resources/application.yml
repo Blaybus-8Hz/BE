@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   security:
@@ -44,6 +44,15 @@ spring:
       approveUrl: ${APPROVE_URL}
       cancelUrl: ${CANCEL_URL}
       failUrl: ${FAIL_URL}
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
 
 jwt:
   secret-key: ${JWT_SECRET}

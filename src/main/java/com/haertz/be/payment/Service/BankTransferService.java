@@ -1,4 +1,4 @@
-package com.haertz.be.payment.service;
+package com.haertz.be.payment.Service;
 
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.dto.BankTransferDto;
@@ -10,7 +10,6 @@ import com.haertz.be.payment.exception.PaymentErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.Date;
 

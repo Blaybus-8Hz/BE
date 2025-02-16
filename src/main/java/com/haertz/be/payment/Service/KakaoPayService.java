@@ -1,4 +1,4 @@
-package com.haertz.be.payment.service;
+package com.haertz.be.payment.Service;
 
 import com.haertz.be.payment.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +30,13 @@ public class KakaoPayService {
     @Value("${FAIL_URL}")
     private String failUrl;
 
-    private KakaoPayDto kakaoPayDTO;
+    private KakaoPayDTO kakaoPayDTO;
     private String cid = "TC0ONETIME"; //가맹점용 코드(테스트용)
     private final RestTemplate restTemplate= new RestTemplate();
     @Autowired
     private PaymentSaveService paymentSaveService;
 
-    public KakaoPayDto kakaoPayReady(KakaoPayRequestDto requestDTO) {
+    public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -55,7 +55,7 @@ public class KakaoPayService {
         //헤더와 바디 붙이기
         HttpEntity<Map<String,Object>>body = new HttpEntity<>(parameters, headers);
         try {
-            kakaoPayDTO = restTemplate.postForObject(new URI(Host + "/v1/payment/ready"), body, KakaoPayDto.class);
+            kakaoPayDTO = restTemplate.postForObject(new URI(Host + "/v1/payment/ready"), body, KakaoPayDTO.class);
             log.info("카카오페이 요청 성공:{}}", kakaoPayDTO);
             return kakaoPayDTO;
         } catch (RestClientException | URISyntaxException e) {

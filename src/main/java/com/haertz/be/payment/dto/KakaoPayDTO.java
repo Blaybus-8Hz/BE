@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class KakaoPayDto {
+public class KakaoPayDTO {
     private String tid;
     private String next_redirect_pc_url; //요청한 클라이언트가 pc 웹일 경우
     private String next_redirect_mobile_url; //요청한 클라이언트가 모바일웹일 경우
