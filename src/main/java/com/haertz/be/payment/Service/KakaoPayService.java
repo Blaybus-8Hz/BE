@@ -117,4 +117,31 @@ public class KakaoPayService {
             throw new BaseException(PaymentErrorCode.PAYMENT_PROCESSING_ERROR);
         }
     }
+    public KakaoPayCancelDto kakaoPayCancel(KakaoPayCancelRequestDto requestDTO) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
+        headers.add("Content-type", "application/json");
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("cid", cid);
+        parameters.put("tid", requestDTO.getTid());
+        parameters.put("partner_order_id", requestDTO.getPartnerOrderId());
+        parameters.put("partner_user_id", requestDTO.getPartnerUserId());
+        parameters.put("cancel_amount", requestDTO.getCancelAmount());
+        parameters.put("cancel_tax_free_amount", requestDTO.getCancelTaxFreeAmount());
+
+        HttpEntity<Map<String,Object>>body = new HttpEntity<>(parameters, headers);
+        try {
+            KakaoPayCancelDto cancelResponse = restTemplate.postForObject(
+                    new URI(Host + "/v1/payment/cancel"), body, KakaoPayCancelDto.class);
+            log.info("결제 취소 응답: {}", cancelResponse);
+
+            // 추후 디자이너 예약 확정 엔티티에서 해당 partner_order_id를 통해 예약 데이터를 삭제로직 구현
+            // designerBookingRepository.deleteByPartnerOrderId(requestDTO.getPartnerOrderId());
+            return cancelResponse;
+        } catch (RestClientException | URISyntaxException e) {
+            log.error("결제 취소 실패", e);
+            throw new BaseException(PaymentErrorCode.PAYMENT_CANCELLATION_ERROR);
+        }
+    }
 }
