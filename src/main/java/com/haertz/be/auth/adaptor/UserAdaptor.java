@@ -3,6 +3,7 @@ package com.haertz.be.auth.adaptor;
 import com.haertz.be.auth.entity.User;
 import com.haertz.be.auth.exception.UserErrorCode;
 import com.haertz.be.auth.repository.UserRepository;
+import com.haertz.be.booking.entity.Booking;
 import com.haertz.be.common.annotation.Adaptor;
 import com.haertz.be.common.exception.base.BaseException;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,5 @@ public class UserAdaptor {
         return userRepository.save(user);
     }
 
-
+    
 }
