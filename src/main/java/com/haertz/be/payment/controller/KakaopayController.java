@@ -1,10 +1,7 @@
 package com.haertz.be.payment.controller;
 
-import com.haertz.be.payment.dto.KakaoPayApproveDto;
-import com.haertz.be.payment.dto.KakaoPayApproveRequestDto;
-import com.haertz.be.payment.dto.KakaoPayDTO;
-import com.haertz.be.payment.dto.KakaoPayRequestDTO;
 import com.haertz.be.payment.Service.KakaoPayService;
+import com.haertz.be.payment.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.java.Log;
@@ -44,6 +41,16 @@ public class KakaopayController {
         if (approveResponse != null) {
             return ResponseEntity.ok(approveResponse);
         } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+    @Operation(summary="카카오페이 결제 취소 요청을 보냅니다.")
+    @PostMapping("/api/kakaPay/cancel")
+    public ResponseEntity<KakaoPayCancelDto> kakaoPaycancel(@RequestBody KakaoPayCancelRequestDto requestDTO){
+        KakaoPayCancelDto approveResponse=kakaoPayService.kakaoPayCancel(requestDTO);
+        if (approveResponse != null) {
+            return ResponseEntity.ok(approveResponse);
+        }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
