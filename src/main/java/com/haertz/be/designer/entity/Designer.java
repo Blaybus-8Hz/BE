@@ -1,5 +1,6 @@
 package com.haertz.be.designer.entity;
 
+import com.haertz.be.booking.entity.MeetingStatus;
 import com.haertz.be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,4 +20,22 @@ public class Designer extends BaseTimeEntity {
 
     @Column(name = "designer_name")
     private String designerName;
+
+    @Column(name = "designer_shop")
+    private String designerShop;
+
+    @Column(name = "designer_district")
+    private String designerDistrict;
+
+    @Column(name = "designer_specialty")
+    private String designerSpecialty;
+
+    @Column(name = "designer_cost")
+    private Integer designerCost;
+
+    @Enumerated(EnumType.STRING)
+    private MeetingStatus meetingStatus; //대면상담, 비대면 상담 여부
+
+    @Column(name = "designer_account")
+    private String designerAccount;
 }
