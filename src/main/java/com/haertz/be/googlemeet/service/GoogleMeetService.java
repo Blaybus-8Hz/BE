@@ -31,6 +31,9 @@ public class GoogleMeetService {
     private final RestTemplate restTemplate=new RestTemplate();
     private final UserRepository userRepository; //유저 디비에서 구글 엑세스 토큰 조회
 
+    //예약엔티티에 저장하기 위한 코드(예약 로직 완성 전 주석처리)
+    //private final BookingRepository bookingRepository;
+
     public GoogleMeetDto googlemeetrequest(GoogleMeetRequestDto requestDTO){
         /*나중에 추가 구현
         //DB에서 해당 유저의 구글엑세스토큰 조회
@@ -90,6 +93,13 @@ public class GoogleMeetService {
                         GoogleMeetDto googleMeetDto = new GoogleMeetDto();
                         googleMeetDto.setReservationId(requestDTO.getReservationId());
                         googleMeetDto.setGoogleMeetingLink(googleMeetLink);  // 미팅 링크 반환
+                        /*
+                        //예약엔티티에 구글미팅 링크 저장(예약 로직 완성 전 주석처리)
+                        Booking booking = bookingRepository.findById(requestDTO.getReservationId())
+                                .orElseThrow(()->new RuntimeException("예약이 존재하지 않습니다."));
+                        booking.setGoogleMeetingLink(googleMeetLink);
+
+                         */
                         return googleMeetDto;
                     }
                 }
