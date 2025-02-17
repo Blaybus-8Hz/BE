@@ -88,7 +88,6 @@ public class KakaoPayService {
 
             //승인 응답에서 amount 정보 가져오기
             BigDecimal totalAmount=new BigDecimal(approveResponse.getAmount().getTotal());
-
             //1. 결제 내역 저장위한 dto 설정
             PaymentSaveDto paymentSaveDto = new PaymentSaveDto();
             paymentSaveDto.setPaymentMethod(PaymentMethod.KAKAO_PAY);
@@ -101,6 +100,16 @@ public class KakaoPayService {
             //2.결제내역 저장
             paymentSaveService.savePayment(paymentSaveDto);
 
+            /*구글 미팅링크 생성 관련 코드들
+            GoogleMeetRequestDto googleMeetRequestDto = new GoogleMeetRequestDto();
+            googleMeetRequestDto.setReservationId(1L); //현재는 테스트용. 예약엔티티 설정 후 변경.
+            googleMeetRequestDto.setUserId(Long.valueOf(requestDTO.getPartner_user_id()));
+            googleMeetRequestDto.setGooglemeetaccessToken("ya29.a0AXeO80RuWDPXpOuB--diMWqZ0g2MCyjZol0GiWk9643x9wGR8dwTwfeIJWSefvgdpAR9U8P9jJbCM0VBO-gC4rtstWB3UFUMsDV8AE6okedSaoVNu0BNO8NpxfflqNB6oh3oJW4kHvuJnHPCPly0mZWrY-QU_QhUcLgWd12SrQaCgYKAVoSARISFQHGX2MiLTsc60kevgi5VbtqxCGF_Q0177");
+            GoogleMeetDto googleMeetingLink= googleMeetService.googlemeetrequest(googleMeetRequestDto);
+            log.info(googleMeetingLink.toString());
+            String googlemeetlink=googleMeetingLink.getGoogleMeetingLink();
+            approveResponse.setGoogleMeetingLink(googlemeetlink);
+             */
             approveResponse.setGoogleMeetingLink("구글미팅 링크 생성로직은 아직 구현 전..");
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {
