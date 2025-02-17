@@ -4,6 +4,7 @@ import com.haertz.be.booking.entity.Booking;
 import com.haertz.be.booking.service.BookingService;
 import com.haertz.be.common.response.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-//@Tag("")
+@Tag(name="예약조회", description = "예약조회를 위한 api입니다.")
 @RestController
 @RequiredArgsConstructor
 class BookingController {
