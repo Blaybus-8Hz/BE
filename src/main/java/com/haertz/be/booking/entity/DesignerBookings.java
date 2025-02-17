@@ -1,9 +1,7 @@
 package com.haertz.be.booking.entity;
 
-import com.haertz.be.auth.entity.User;
 import com.haertz.be.common.entity.BaseTimeEntity;
 import com.haertz.be.designer.entity.Designer;
-import com.haertz.be.payment.entity.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -13,16 +11,18 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
+
+// 디자이너 별 예약 확정 시간 엔티티
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Getter
-@Table(name = "booking")
-public class Booking extends BaseTimeEntity {
+@Table(name = "designer_booking", uniqueConstraints = @UniqueConstraint(columnNames = {"designer_id, booking_date, booking_time"}))
+public class DesignerBookings extends BaseTimeEntity {
 
     @Id
-    @Column(name = "booking_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookingId;
+    private Long designerBookingsId;
 
     @NotNull
     @Column(nullable = false)
@@ -31,22 +31,6 @@ public class Booking extends BaseTimeEntity {
     @NotNull
     @Column(nullable = false)
     private LocalTime bookingTime;
-
-    @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus;
-
-    @Enumerated(EnumType.STRING)
-    private MeetingStatus meetingStatus;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
-
-    @Column(columnDefinition = "TEXT", nullable = true)
-    private String requestDetails;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Designer designer;
