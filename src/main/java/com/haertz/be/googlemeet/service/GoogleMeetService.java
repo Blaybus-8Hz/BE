@@ -41,7 +41,7 @@ public class GoogleMeetService {
             throw new BaseException(UserErrorCode.GOOGLE_ACCESS_TOKEN_NOT_FOUND);
         }
          */
-        String googleaccessToken=requestDTO.getGooglemeetaccessToken();
+        String googleaccessToken=requestDTO.getGooglemeetaccessToken(); //테스트용. 실제로는 데이터베이스에서 엑세스 토큰 검색.
         String url = "https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -72,7 +72,6 @@ public class GoogleMeetService {
         // conferenceDataVersion을 1로 설정하여 회의 세부 정보를 추가하도록 설정
         requestBody.put("conferenceDataVersion", 1);
 
-
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
         log.info("Google Meet Response: " + response);
@@ -93,7 +92,7 @@ public class GoogleMeetService {
                         return googleMeetDto;
                     }
                 }
-        }
-    }throw new RuntimeException("Failed to create Google Meet link");
+            }
+        }throw new RuntimeException("Failed to create Google Meet link");
     }
 }
