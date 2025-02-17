@@ -6,14 +6,14 @@ import com.haertz.be.designer.entity.Designer;
 import com.haertz.be.payment.entity.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "booking")
@@ -45,10 +45,10 @@ public class Booking extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = true)
     private String requestDetails;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @Column(nullable = false)
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Designer designer;
+    @Column(nullable = false)
+    private Long designerId;
 
 }

@@ -32,7 +32,7 @@ public class DesignerBookings extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalTime bookingTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Designer designer;
+    @Column(nullable = false)
+    private Long designerId;
 
 }
