@@ -6,6 +6,7 @@ import com.haertz.be.auth.repository.UserRepository;
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.googlemeet.dto.GoogleMeetDto;
 import com.haertz.be.googlemeet.dto.GoogleMeetRequestDto;
+import com.haertz.be.googlemeet.exception.GoogleMeetErrorCode;
 import com.haertz.be.payment.dto.BankTransferRequestDto;
 import com.haertz.be.payment.dto.PaymentSaveDto;
 import com.haertz.be.payment.entity.PaymentMethod;
@@ -93,6 +94,6 @@ public class GoogleMeetService {
                     }
                 }
             }
-        }throw new RuntimeException("Failed to create Google Meet link");
+        }throw new BaseException(GoogleMeetErrorCode.FAILED_TO_CREATE_MEET_LINK);
     }
 }
