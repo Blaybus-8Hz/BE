@@ -14,4 +14,5 @@ public class BankTransferDto {
     private String googleMeetingLink;
     private Date created_at;
     private PaymentStatus paymentstatus;
+    private String designerScheduleId;
 }

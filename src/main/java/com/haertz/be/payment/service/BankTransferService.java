@@ -1,5 +1,6 @@
 package com.haertz.be.payment.service;
 
+import com.haertz.be.booking.dto.request.PreBookingRequest;
 import com.haertz.be.booking.service.DesignerScheduleDomainService;
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.common.utils.AuthenticatedUserUtils;
@@ -30,17 +31,26 @@ public class BankTransferService {
         Long currentUserId = userUtils.getCurrentUserId();
 
         // 계좌이체 요청 정보가 유효한지 확인(나중에 예약관련된 검증도 추가)
-        if (requestDTO == null  || requestDTO.getDesignerScheduleId() == null) {
+        if (requestDTO == null) {
             throw new BaseException(PaymentErrorCode.INVALID_PAYMENT_REQUEST);
         }
         try {
+            //디자이너스케쥴(임시예약정보 생성해 다른 사용자가 예약하지 못하도록
+            PreBookingRequest preBooking = new PreBookingRequest(
+                    requestDTO.getDesignerId(),       // 디자이너 ID
+                    requestDTO.getBookingDate(),      // 예약 날짜
+                    requestDTO.getBookingTime()       // 예약 시간
+            );
+            // 임시 스케줄 생성 후 해당 스케줄의 ID를 반환받음.
+            Long tempScheduleId = designerScheduleDomainService.registerTempSchedule(currentUserId, preBooking);
+
             PaymentSaveDto paymentSaveDto = new PaymentSaveDto();
             paymentSaveDto.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
             paymentSaveDto.setPaymentDate(new Date());
             paymentSaveDto.setPaymentStatus(PaymentStatus.PENDING);
             paymentSaveDto.setUserId(currentUserId);
             paymentSaveDto.setTotalAmount(new BigDecimal(requestDTO.getTotal_amount()));
-            paymentSaveDto.setPartnerOrderId(requestDTO.getDesignerScheduleId());
+            paymentSaveDto.setPartnerOrderId(String.valueOf(tempScheduleId));
             log.info(paymentSaveDto.toString());
             Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
             /*
@@ -57,10 +67,13 @@ public class BankTransferService {
             BankTransferDto bankTransferDto = new BankTransferDto();
             bankTransferDto.setPaymentId(savedpayment.getPaymentId());
             bankTransferDto.setGoogleMeetingLink("구글미팅 링크 생성로직은 아직 구현 전..");
+            bankTransferDto.setDesignerScheduleId(String.valueOf(tempScheduleId));
             //String googlemeetlink=googleMeetingLink.getGoogleMeetingLink();
             //bankTransferDto.setGoogleMeetingLink(googlemeetlink);
             bankTransferDto.setCreated_at(new Date());
             bankTransferDto.setPaymentstatus(savedpayment.getPaymentStatus());
+            designerScheduleDomainService.confirmScheduleAfterPayment(tempScheduleId, PaymentStatus.PENDING);
+
             return bankTransferDto;
         } catch (Exception ex) {
             // 결제 처리 중 오류 발생 시
