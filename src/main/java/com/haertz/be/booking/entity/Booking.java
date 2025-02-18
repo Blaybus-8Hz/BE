@@ -1,11 +1,9 @@
 package com.haertz.be.booking.entity;
 
-import com.haertz.be.booking.dto.request.BookingInfoRequest;
 import com.haertz.be.common.entity.BaseTimeEntity;
 import com.haertz.be.designer.entity.Designer;
 import com.haertz.be.payment.entity.PaymentStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
