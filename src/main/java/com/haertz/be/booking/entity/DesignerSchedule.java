@@ -47,8 +47,8 @@ public class DesignerSchedule extends BaseTimeEntity {
     @Column(nullable = false)
     private Long userId;
 
-    public void markAsCompleted(){
+    public void markAsCompleted(PaymentStatus paymentStatus){
         isTemporary = false;
-        paymentStatus = PaymentStatus.COMPLETED;
+        this.paymentStatus = paymentStatus;
     }
 }
