@@ -114,6 +114,7 @@ public class KakaoPayService {
              */
             approveResponse.setGoogleMeetingLink("구글미팅 링크 생성로직은 아직 구현 전..");
             approveResponse.setPaymentId(savedpayment.getPaymentId());
+            approveResponse.setPaymentstatus(savedpayment.getPaymentStatus());
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 승인 실패", e);
