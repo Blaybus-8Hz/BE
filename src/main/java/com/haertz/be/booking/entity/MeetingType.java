@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum MeetingType {
-    ONLINE("ONLINE"),
-    OFFLINE("OFFLINE");
+    REMOTE("REMOTE"),
+    FACE_TO_FACE("FACE_TO_FACE");
 
     public final String value;
 }
