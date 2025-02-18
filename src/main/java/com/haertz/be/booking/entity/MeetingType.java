@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum MeetingStatus {
+public enum MeetingType {
     ONLINE("ONLINE"),
     OFFLINE("OFFLINE");
 
