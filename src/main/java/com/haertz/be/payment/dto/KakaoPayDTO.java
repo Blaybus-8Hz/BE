@@ -16,4 +16,5 @@ public class KakaoPayDTO {
     private String next_redirect_mobile_url; //요청한 클라이언트가 모바일웹일 경우
     private String next_redirect_app_url;
     private Date created_at;
+    private String designerScheduleId;
 }

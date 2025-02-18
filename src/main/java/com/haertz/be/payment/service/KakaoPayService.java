@@ -79,6 +79,9 @@ public class KakaoPayService {
         try {
             kakaoPayDTO = restTemplate.postForObject(new URI(Host + "/v1/payment/ready"), body, KakaoPayDTO.class);
             log.info("카카오페이 요청 성공:{}}", kakaoPayDTO);
+            if (kakaoPayDTO != null) {
+                kakaoPayDTO.setDesignerScheduleId(String.valueOf(tempScheduleId));
+            }
             return kakaoPayDTO;
         } catch (RestClientException | URISyntaxException e) {
             log.error("카카오페이 요청 실패", e);
