@@ -39,8 +39,8 @@ public class BookingController {
     }
 
     @Operation(summary = "사용자의 지난 예약 내역을 조회합니다.")
-    @GetMapping("/api/past/{userId}")
-    public SuccessResponse<Object> getPastBookings(@PathVariable("userId") Long userId){
+    @GetMapping("/api/past")
+    public SuccessResponse<Object> getPastBookings(){
         List<Booking> bookingList = bookingService.getPastBookings();
 
         return SuccessResponse.of(bookingList);
