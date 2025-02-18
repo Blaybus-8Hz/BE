@@ -31,7 +31,7 @@ public class BookingController {
     }
 
     @Operation(summary = "사용자의 다가오는 예약 내역을 조회합니다.")
-    @GetMapping("/api/current")
+    @GetMapping("/current")
     public SuccessResponse<Object> getBookings(){
         List<Booking> bookingList = bookingService.getCurrentBookings();
 
@@ -39,7 +39,7 @@ public class BookingController {
     }
 
     @Operation(summary = "사용자의 지난 예약 내역을 조회합니다.")
-    @GetMapping("/api/past")
+    @GetMapping("/past")
     public SuccessResponse<Object> getPastBookings(){
         List<Booking> bookingList = bookingService.getPastBookings();
 
