@@ -4,9 +4,8 @@ import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.googlemeet.dto.GoogleMeetDto;
 import com.haertz.be.googlemeet.dto.GoogleMeetRequestDto;
 import com.haertz.be.googlemeet.service.GoogleMeetService;
-import com.haertz.be.payment.dto.BankTransferDto;
-import com.haertz.be.payment.dto.BankTransferRequestDto;
-import com.haertz.be.payment.dto.PaymentSaveDto;
+import com.haertz.be.payment.dto.*;
+import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
 import com.haertz.be.payment.entity.PaymentStatus;
 import com.haertz.be.payment.exception.PaymentErrorCode;
@@ -22,6 +21,7 @@ import java.util.Date;
 public class BankTransferService {
     private final PaymentSaveService paymentSaveService;
     private final GoogleMeetService googleMeetService;
+    private final com.haertz.be.payment.repository.PaymentRepository paymentRepository;
 
     public BankTransferDto banktransferrequest(BankTransferRequestDto requestDTO) {
         // 계좌이체 요청 정보가 유효한지 확인
@@ -58,6 +58,29 @@ public class BankTransferService {
         } catch (Exception ex) {
             // 결제 처리 중 오류 발생 시
             throw new BaseException(PaymentErrorCode.PAYMENT_PROCESSING_ERROR);
+        }
+    }
+    public BankTransferCancelDto banktransfercancel(BankTransferCancelRequestDto requestDTO) {
+        // 요청 파라미터 검증
+        if (requestDTO == null || requestDTO.getPaymentId() == null) {
+            throw new BaseException(PaymentErrorCode.INVALID_PAYMENT_REQUEST);
+        }
+        try{
+            Payment payment= paymentRepository.findByPaymentId(requestDTO.getPaymentId())
+                    .orElseThrow(() -> new BaseException(PaymentErrorCode.PAYMENT_NOT_FOUND));
+            //결제 status 업데이트
+            //payment.setPaymentStatus(PaymentStatus.REFUNDED);
+            //paymentRepository.save(payment);
+
+            //디자이너 예약 확정 엔티티에서 관련 데이터 삭제(데이터들로 조회후 삭제 처리 구현)
+
+            //취소 완료 응답 dto 생성
+            BankTransferCancelDto bankTransferCancelDto = new BankTransferCancelDto();
+            bankTransferCancelDto.setPaymentId(payment.getPaymentId());
+            bankTransferCancelDto.setPaymentstatus(payment.getPaymentStatus());
+            return bankTransferCancelDto;
+        } catch (Exception ex) {
+            throw new BaseException(PaymentErrorCode.PAYMENT_CANCELLATION_ERROR);
         }
     }
 }
