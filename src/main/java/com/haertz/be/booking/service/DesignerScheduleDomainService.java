@@ -1,8 +1,8 @@
 package com.haertz.be.booking.service;
 
 import com.haertz.be.booking.adaptor.DesignerScheduleAdaptor;
+import com.haertz.be.booking.constant.AvailableTimeSlots;
 import com.haertz.be.booking.converter.BookingConverter;
-import com.haertz.be.booking.dto.request.BookingInfoRequest;
 import com.haertz.be.booking.dto.request.PreBookingRequest;
 import com.haertz.be.booking.entity.DesignerSchedule;
 import com.haertz.be.booking.exception.BookingErrorCode;
@@ -15,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.haertz.be.booking.constant.AvailableTimeSlots.TIME_SLOTS;
+import static com.haertz.be.common.constant.StaticValue.MAX_SLOTS;
 
 @Service
 @RequiredArgsConstructor
@@ -77,7 +83,62 @@ public class DesignerScheduleDomainService {
         }
 
     }
+    @Transactional(readOnly = true)
+    public List<LocalDate> getAvailableDates(Long designerId){
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = YearMonth.from(today.plusMonths(3)).atEndOfMonth();
+
+        List<LocalDate> allDates = today.datesUntil(endDate.plusDays(1))
+                .toList();
+
+        List<LocalDate> fullyBookedDates = designerScheduleAdaptor.findFullyBookedDates(designerId, today, endDate, MAX_SLOTS);
+
+        return allDates.stream()
+                .filter(date -> {
+                    if (date.equals(today) && LocalTime.now().isAfter(LocalTime.of(19, 30))) {
+                        return false;
+                    }
+                    if (date.equals(today)) {
+                        return hasAvailableTimesToday(designerId, today);
+                    }
+                    return !fullyBookedDates.contains(date);
+                })
+                .collect(Collectors.toList());
+    }
 
 
+    // 오늘 날짜에서 현재 시간 이후 가능한 시간 있는지 확인
+    private boolean hasAvailableTimesToday(Long designerId, LocalDate today) {
+        List<LocalTime> bookedTimes = designerScheduleAdaptor.findBookedTimes(designerId, today);
+
+        LocalTime now = LocalTime.now().withSecond(0).withNano(0);
+        return TIME_SLOTS.stream()
+                .anyMatch(time -> time.isAfter(now) && !bookedTimes.contains(time));
+    }
+
+    // 해당 날짜에서 예약 가능 시간 반환
+    public List<LocalTime> getAvailableTimes(Long designerId, LocalDate bookingDate) {
+
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = YearMonth.from(today.plusMonths(3)).atEndOfMonth();
+
+        if (bookingDate == null || bookingDate.isBefore(today) || bookingDate.isAfter(endDate)) {
+            throw new BaseException(BookingErrorCode.INVALID_BOOKING_DATE);
+        }
+
+        List<LocalTime> bookedTimes = designerScheduleAdaptor.findBookedTimes(designerId, bookingDate);
+        List<LocalTime> availableTimes = AvailableTimeSlots.TIME_SLOTS;
+
+        if (bookingDate.equals(LocalDate.now())) {
+            LocalTime now = LocalTime.now().withSecond(0).withNano(0);
+            availableTimes = availableTimes.stream()
+                    .filter(time -> time.isAfter(now))
+                    .toList();
+        }
+
+        return availableTimes.stream()
+                .filter(time -> !bookedTimes.contains(time))
+                .collect(Collectors.toList());
+    }
 
 }
