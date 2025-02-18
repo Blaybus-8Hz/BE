@@ -28,6 +28,5 @@ public class User extends BaseTimeEntity {
     @NotNull
     private AuthInfo authInfo;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> bookings = new ArrayList<>();
+
 }
