@@ -1,4 +1,4 @@
-package com.haertz.be.payment.Service;
+package com.haertz.be.payment.service;
 
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.exception.PaymentErrorCode;
