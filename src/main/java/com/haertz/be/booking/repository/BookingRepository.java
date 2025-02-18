@@ -13,6 +13,6 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     boolean existsByDesignerDesignerIdAndBookingDateAndBookingTime(Long designerId, LocalDate bookingDate, LocalTime bookingTime);
 
-    List<Booking> findByUser(User user);
+    List<Booking> findByUserId(Long userId);
 
 }

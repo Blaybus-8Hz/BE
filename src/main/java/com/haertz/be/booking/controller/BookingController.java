@@ -31,9 +31,9 @@ public class BookingController {
     }
 
     @Operation(summary = "사용자의 다가오는 예약 내역을 조회합니다.")
-    @GetMapping("/api/current/{userId}")
-    public SuccessResponse<Object> getBookings(@PathVariable("userId") Long userId){
-        List<Booking> bookingList = bookingService.getCurrentBookings(userId);
+    @GetMapping("/api/current")
+    public SuccessResponse<Object> getBookings(){
+        List<Booking> bookingList = bookingService.getCurrentBookings();
 
         return SuccessResponse.of(bookingList);
     }
@@ -41,7 +41,7 @@ public class BookingController {
     @Operation(summary = "사용자의 지난 예약 내역을 조회합니다.")
     @GetMapping("/api/past/{userId}")
     public SuccessResponse<Object> getPastBookings(@PathVariable("userId") Long userId){
-        List<Booking> bookingList = bookingService.getPastBookings(userId);
+        List<Booking> bookingList = bookingService.getPastBookings();
 
         return SuccessResponse.of(bookingList);
     }
