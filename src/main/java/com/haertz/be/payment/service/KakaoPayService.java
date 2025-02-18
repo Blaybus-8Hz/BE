@@ -6,6 +6,7 @@ import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
 import com.haertz.be.payment.entity.PaymentStatus;
 import com.haertz.be.payment.exception.PaymentErrorCode;
+import com.haertz.be.payment.repository.temp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,7 @@ public class KakaoPayService {
     private String cid = "TC0ONETIME"; //가맹점용 코드(테스트용)
     private final RestTemplate restTemplate= new RestTemplate();
     private final PaymentSaveService paymentSaveService;
+    private final temp temp;
 
     public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
         HttpHeaders headers = new HttpHeaders();
@@ -137,9 +139,21 @@ public class KakaoPayService {
                     new URI(Host + "/v1/payment/cancel"), body, KakaoPayCancelDto.class);
             log.info("결제 취소 응답: {}", cancelResponse);
 
+            String tid = cancelResponse.getTid();
+            Payment payment= temp.findByPaymentTransaction(tid)
+                    .orElseThrow(() -> new BaseException(PaymentErrorCode.PAYMENT_NOT_FOUND));
+            //결제 status 업데이트
+            payment.setPaymentStatus(PaymentStatus.REFUNDED);
+            temp.save(payment);
+
+            KakaoPayCancelDto kakaoPayCancelDto = new KakaoPayCancelDto();
+            kakaoPayCancelDto.setCid(cancelResponse.getCid());
+            kakaoPayCancelDto.setTid(cancelResponse.getTid());
+            kakaoPayCancelDto.setPaymentstatus(payment.getPaymentStatus());
+
             // 추후 디자이너 예약 확정 엔티티에서 해당 partner_order_id를 통해 예약 데이터를 삭제로직 구현
             // designerBookingRepository.deleteByPartnerOrderId(requestDTO.getPartnerOrderId());
-            return cancelResponse;
+            return kakaoPayCancelDto;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 취소 실패", e);
             throw new BaseException(PaymentErrorCode.PAYMENT_CANCELLATION_ERROR);
