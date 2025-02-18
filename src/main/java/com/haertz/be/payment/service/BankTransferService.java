@@ -28,7 +28,7 @@ public class BankTransferService {
         Long currentUserId = userUtils.getCurrentUserId();
 
         // 계좌이체 요청 정보가 유효한지 확인(나중에 예약관련된 검증도 추가)
-        if (requestDTO == null  || requestDTO.getPartner_order_id() == null) {
+        if (requestDTO == null  || requestDTO.getDesignerScheduleId() == null) {
             throw new BaseException(PaymentErrorCode.INVALID_PAYMENT_REQUEST);
         }
         try {
@@ -38,6 +38,7 @@ public class BankTransferService {
             paymentSaveDto.setPaymentStatus(PaymentStatus.PENDING);
             paymentSaveDto.setUserId(currentUserId);
             paymentSaveDto.setTotalAmount(new BigDecimal(requestDTO.getTotal_amount()));
+            paymentSaveDto.setPartnerOrderId(requestDTO.getDesignerScheduleId());
             log.info(paymentSaveDto.toString());
             Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
             /*
@@ -50,7 +51,6 @@ public class BankTransferService {
             log.info(googleMeetingLink.toString());
 
              */
-
             // 계좌이체 후 DTO 반환
             BankTransferDto bankTransferDto = new BankTransferDto();
             bankTransferDto.setPaymentId(savedpayment.getPaymentId());
