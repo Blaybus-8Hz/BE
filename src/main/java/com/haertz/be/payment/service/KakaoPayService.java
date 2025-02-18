@@ -1,5 +1,6 @@
 package com.haertz.be.payment.service;
 
+import com.haertz.be.booking.service.DesignerScheduleDomainService;
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.common.utils.AuthenticatedUserUtils;
 import com.haertz.be.payment.dto.*;
@@ -44,6 +45,7 @@ public class KakaoPayService {
     private final PaymentSaveService paymentSaveService;
     private final temp temp;
     private final AuthenticatedUserUtils userUtils;
+    private final DesignerScheduleDomainService designerScheduleDomainService;
 
     public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
         Long currentUserId = userUtils.getCurrentUserId();
@@ -106,6 +108,9 @@ public class KakaoPayService {
             paymentSaveDto.setPartnerOrderId(requestDTO.getDesignerScheduleId());
             //2.결제내역 저장
             Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
+
+            // 디자이너 스케줄의 상태를 변경 메서드 호출
+            designerScheduleDomainService.confirmScheduleAfterPayment(Long.valueOf(requestDTO.getDesignerScheduleId()), PaymentStatus.COMPLETED);
 
             /*구글 미팅링크 생성 관련 코드들
             GoogleMeetRequestDto googleMeetRequestDto = new GoogleMeetRequestDto();
