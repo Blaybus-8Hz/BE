@@ -27,15 +27,11 @@ public class Designer extends BaseTimeEntity {
     private MeetingMode meetingMode;
 
     @Column(name = "designer_shop")
-
-
-    private String designerShop; //매장주소
+    private String designerShop; // 매장주소
 
     @Enumerated(EnumType.STRING)
     @Column(name = "designer_district")
-    @Enumerated(EnumType.STRING)
     private District designerDistrict;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "designer_specialty")
