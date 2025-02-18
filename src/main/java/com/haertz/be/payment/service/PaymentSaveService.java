@@ -2,9 +2,9 @@ package com.haertz.be.payment.service;
 
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.exception.PaymentErrorCode;
-import com.haertz.be.payment.repository.PaymentRepository;
 import com.haertz.be.payment.dto.PaymentSaveDto;
 import com.haertz.be.payment.entity.Payment;
+import com.haertz.be.payment.repository.temp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Log
 @Transactional
 public class PaymentSaveService {
-    private final PaymentRepository paymentRepository; //// 결제 내역을 저장할 레포지토리
+    private final temp temp; //// 결제 내역을 저장할 레포지토리
 
     public Payment savePayment(PaymentSaveDto paymentSaveDto) {
         // paymentSaveDto 필드들이 null이면 예외를 발생시킴
@@ -32,7 +32,7 @@ public class PaymentSaveService {
         payment.setPartnerOrderId(paymentSaveDto.getPartnerOrderId());  // 외부 결제 서비스에서 사용하는 주문 ID
         payment.setPaymentTransaction(paymentSaveDto.getPaymentTransaction());
         try {
-            return paymentRepository.save(payment); // 결제 저장
+            return temp.save(payment); // 결제 저장
         } catch (Exception e) {
             throw new BaseException(PaymentErrorCode.PAYMENT_PROCESSING_ERROR); // 예외 처리 후 다시 던지기
         }

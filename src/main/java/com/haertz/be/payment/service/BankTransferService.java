@@ -7,6 +7,7 @@ import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
 import com.haertz.be.payment.entity.PaymentStatus;
 import com.haertz.be.payment.exception.PaymentErrorCode;
+import com.haertz.be.payment.repository.temp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.Date;
 public class BankTransferService {
     private final PaymentSaveService paymentSaveService;
     private final GoogleMeetService googleMeetService;
-    private final com.haertz.be.payment.repository.PaymentRepository paymentRepository;
+    private final temp temp;
 
     public BankTransferDto banktransferrequest(BankTransferRequestDto requestDTO) {
         // 계좌이체 요청 정보가 유효한지 확인(나중에 예약관련된 검증도 추가)
@@ -65,7 +66,7 @@ public class BankTransferService {
             throw new BaseException(PaymentErrorCode.INVALID_PAYMENT_REQUEST);
         }
         try{
-            Payment payment= paymentRepository.findByPaymentId(requestDTO.getPaymentId())
+            Payment payment= temp.findByPaymentId(requestDTO.getPaymentId())
                     .orElseThrow(() -> new BaseException(PaymentErrorCode.PAYMENT_NOT_FOUND));
             //결제 status 업데이트
             //payment.setPaymentStatus(PaymentStatus.REFUNDED);
