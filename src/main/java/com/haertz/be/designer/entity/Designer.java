@@ -33,11 +33,10 @@ public class Designer extends BaseTimeEntity {
     @Column(name = "designer_district")
     private District designerDistrict;
 
-    @ElementCollection(targetClass = Specialty.class)
+
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "designer_specialty", joinColumns = @JoinColumn(name = "designer_id"))
     @Column(name = "designer_specialty")
-    private List<Specialty> designerSpecialty;
+    private Specialty designerSpecialty;
 
     @Column(name = "designer_contact_cost")
     private Integer designerContactCost; //대면 가격
