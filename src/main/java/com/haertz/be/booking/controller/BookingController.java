@@ -4,6 +4,7 @@ import com.haertz.be.booking.dto.request.BookingInfoRequest;
 import com.haertz.be.booking.dto.response.BookingResponse;
 import com.haertz.be.booking.entity.Booking;
 import com.haertz.be.booking.service.BookingDomainService;
+import com.haertz.be.booking.service.BookingService;
 import com.haertz.be.booking.usecase.BookUseCase;
 import com.haertz.be.common.response.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
