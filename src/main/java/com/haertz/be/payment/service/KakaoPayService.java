@@ -1,5 +1,6 @@
 package com.haertz.be.payment.service;
 
+import com.haertz.be.booking.dto.request.PreBookingRequest;
 import com.haertz.be.booking.service.DesignerScheduleDomainService;
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.common.utils.AuthenticatedUserUtils;
@@ -49,6 +50,14 @@ public class KakaoPayService {
 
     public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
         Long currentUserId = userUtils.getCurrentUserId();
+        //디자이너스케쥴(임시예약정보 생성해 다른 사용자가 예약하지 못하도록
+        PreBookingRequest preBooking = new PreBookingRequest(
+                requestDTO.getDesignerId(),       // 디자이너 ID
+                requestDTO.getBookingDate(),      // 예약 날짜
+                requestDTO.getBookingTime()       // 예약 시간
+        );
+        // 임시 스케줄 생성 후 해당 스케줄의 ID를 반환받음.
+        Long tempScheduleId = designerScheduleDomainService.registerTempSchedule(currentUserId, preBooking);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
@@ -56,7 +65,7 @@ public class KakaoPayService {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", cid);
-        parameters.put("partner_order_id", requestDTO.getDesignerScheduleId());
+        parameters.put("partner_order_id",tempScheduleId);
         parameters.put("partner_user_id",currentUserId);
         parameters.put("item_name", requestDTO.getItem_name());
         parameters.put("quantity", requestDTO.getQuantity());
@@ -78,6 +87,7 @@ public class KakaoPayService {
     }
     public KakaoPayApproveDto kakaoPayApprove(KakaoPayApproveRequestDto requestDTO) {
         Long currentUserId = userUtils.getCurrentUserId();
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
