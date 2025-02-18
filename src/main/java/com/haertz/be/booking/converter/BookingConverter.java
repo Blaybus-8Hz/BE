@@ -21,6 +21,7 @@ public class BookingConverter {
                 .bookingStatus(schedule.getPaymentStatus() == PaymentStatus.COMPLETED ? BookingStatus.CONFIRMED : BookingStatus.PENDING)
                 .meetingType(bookingInfo.meetingType())
                 .requestDetails(bookingInfo.requestDetails())
+                .designerScheduleId(schedule.getDesignerScheduleId())
                 .userId(userId)
                 .designer(designer)
                 .build();
