@@ -1,6 +1,7 @@
 package com.haertz.be.booking.converter;
 
 import com.haertz.be.booking.dto.request.BookingInfoRequest;
+import com.haertz.be.booking.dto.request.PreBookingRequest;
 import com.haertz.be.booking.dto.response.BookingResponse;
 import com.haertz.be.booking.entity.Booking;
 import com.haertz.be.booking.entity.BookingStatus;
@@ -12,12 +13,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class BookingConverter {
-    public static Booking toBooking(BookingInfoRequest bookingInfo, Designer designer, Long userId, PaymentStatus paymentStatus) {
+    public static Booking toBooking(BookingInfoRequest bookingInfo, Designer designer, Long userId, DesignerSchedule schedule) {
         return Booking.builder()
-                .bookingDate(bookingInfo.bookingDate())
-                .bookingTime(bookingInfo.bookingTime())
-                .paymentStatus(paymentStatus)
-                .bookingStatus(paymentStatus == PaymentStatus.COMPLETED ? BookingStatus.CONFIRMED : BookingStatus.PENDING)
+                .bookingDate(schedule.getBookingDate())
+                .bookingTime(schedule.getBookingTime())
+                .paymentStatus(schedule.getPaymentStatus())
+                .bookingStatus(schedule.getPaymentStatus() == PaymentStatus.COMPLETED ? BookingStatus.CONFIRMED : BookingStatus.PENDING)
                 .meetingType(bookingInfo.meetingType())
                 .requestDetails(bookingInfo.requestDetails())
                 .userId(userId)
@@ -37,11 +38,11 @@ public class BookingConverter {
                 .build();
     }
 
-    public static DesignerSchedule toDesignerSchedule(BookingInfoRequest bookingInfo, Long userId, PaymentStatus paymentStatus){
+    public static DesignerSchedule toDesignerSchedule(Long userId, PreBookingRequest preBookingRequest, PaymentStatus paymentStatus){
         return DesignerSchedule.builder()
-                .bookingDate(bookingInfo.bookingDate())
-                .bookingTime(bookingInfo.bookingTime())
-                .designerId(bookingInfo.designerId())
+                .bookingDate(preBookingRequest.bookingDate())
+                .bookingTime(preBookingRequest.bookingTime())
+                .designerId(preBookingRequest.designerId())
                 .paymentStatus(paymentStatus)
                 .userId(userId)
                 .build();
