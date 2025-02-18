@@ -5,13 +5,14 @@ import com.haertz.be.booking.dto.response.BookingResponse;
 import com.haertz.be.booking.entity.Booking;
 import com.haertz.be.booking.entity.BookingStatus;
 import com.haertz.be.booking.entity.DesignerSchedule;
+import com.haertz.be.designer.entity.Designer;
 import com.haertz.be.payment.entity.PaymentStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class BookingConverter {
-    public static Booking toBooking(BookingInfoRequest bookingInfo, Long userId, PaymentStatus paymentStatus) {
+    public static Booking toBooking(BookingInfoRequest bookingInfo, Designer designer, Long userId, PaymentStatus paymentStatus) {
         return Booking.builder()
                 .bookingDate(bookingInfo.bookingDate())
                 .bookingTime(bookingInfo.bookingTime())
@@ -20,7 +21,7 @@ public class BookingConverter {
                 .meetingType(bookingInfo.meetingType())
                 .requestDetails(bookingInfo.requestDetails())
                 .userId(userId)
-                .designerId(bookingInfo.designerId())
+                .designer(designer)
                 .build();
     }
 

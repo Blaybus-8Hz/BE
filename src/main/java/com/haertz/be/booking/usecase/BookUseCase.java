@@ -40,7 +40,7 @@ public class BookUseCase {
         }
 
         Designer designer = designerAdaptor.findByDesignerId(bookingInfo.designerId());
-        Booking booking = bookingDomainService.book(bookingInfo, currentUserId, designerSchedule.getPaymentStatus());
+        Booking booking = bookingDomainService.book(bookingInfo, designer, currentUserId, designerSchedule.getPaymentStatus());
 
         return BookingConverter.toBookingResponse(booking, designer.getDesignerName());
     }
