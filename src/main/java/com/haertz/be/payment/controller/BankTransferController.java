@@ -1,6 +1,6 @@
 package com.haertz.be.payment.controller;
 
-import com.haertz.be.payment.Service.BankTransferService;
+import com.haertz.be.payment.service.BankTransferService;
 import com.haertz.be.payment.dto.BankTransferCancelDto;
 import com.haertz.be.payment.dto.BankTransferCancelRequestDto;
 import com.haertz.be.payment.dto.BankTransferDto;

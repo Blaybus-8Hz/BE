@@ -1,8 +1,6 @@
-package com.haertz.be.payment.Service;
+package com.haertz.be.payment.service;
 
 import com.haertz.be.common.exception.base.BaseException;
-import com.haertz.be.googlemeet.dto.GoogleMeetDto;
-import com.haertz.be.googlemeet.dto.GoogleMeetRequestDto;
 import com.haertz.be.googlemeet.service.GoogleMeetService;
 import com.haertz.be.payment.dto.*;
 import com.haertz.be.payment.entity.Payment;

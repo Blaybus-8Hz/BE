@@ -1,6 +1,6 @@
 package com.haertz.be.payment.controller;
 
-import com.haertz.be.payment.Service.KakaoPayService;
+import com.haertz.be.payment.service.KakaoPayService;
 import com.haertz.be.payment.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

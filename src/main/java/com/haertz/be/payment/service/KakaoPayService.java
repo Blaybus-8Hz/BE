@@ -1,4 +1,4 @@
-package com.haertz.be.payment.Service;
+package com.haertz.be.payment.service;
 
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.dto.*;
@@ -8,7 +8,6 @@ import com.haertz.be.payment.entity.PaymentStatus;
 import com.haertz.be.payment.exception.PaymentErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
