@@ -10,6 +10,9 @@ import com.haertz.be.payment.entity.PaymentStatus;
 import com.haertz.be.payment.exception.PaymentErrorCode;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Adaptor
 @RequiredArgsConstructor
 public class DesignerScheduleAdaptor {
@@ -18,14 +21,17 @@ public class DesignerScheduleAdaptor {
     public DesignerSchedule save(DesignerSchedule designerSchedule) {
         return designerScheduleRepository.save(designerSchedule);
     }
-    public Boolean existsByBookingInfo(Long userId, BookingInfoRequest bookingInfo) {
-        return designerScheduleRepository.hasUserBooked(userId, bookingInfo.designerScheduleId(), bookingInfo.bookingDate(), bookingInfo.bookingTime());
+    public Boolean hasUserBookedSchedule(Long userId, Long designerScheduleId) {
+        return designerScheduleRepository.hasUserBooked(userId, designerScheduleId);
+    }
+
+    public Boolean hasBookingByTimeSlot(Long designerId, LocalDate bookingDate, LocalTime bookingTime) {
+        return designerScheduleRepository.hasBookingByTimeSlot(designerId, bookingDate, bookingTime);
     }
     public DesignerSchedule findById(Long designerScheduleId) {
         return designerScheduleRepository.findById(designerScheduleId)
                 .orElseThrow(() -> new BaseException(BookingErrorCode.DESIGNER_SCHEDULE_NOT_FOUND));
     }
-
     public DesignerSchedule isPaymentStatusValid(Long designerScheduleId) {
         DesignerSchedule designerSchedule = findById(designerScheduleId);
 
@@ -35,5 +41,7 @@ public class DesignerScheduleAdaptor {
 
         return designerSchedule;
     }
-
+    public void deleteById(Long designerScheduleId) {
+        designerScheduleRepository.deleteById(designerScheduleId);
+    }
 }
