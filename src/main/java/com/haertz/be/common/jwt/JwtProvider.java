@@ -56,7 +56,7 @@ public class JwtProvider {
                 .issuer("Blaybus")
                 .subject(userId.toString())
                 .issuedAt(now)
-                .expiration(new Date(now.getTime() + (exp * 1000)))
+                .expiration(new Date(now.getTime() + exp))
                 .claim("type", type)
                 .claim("role", role)
                 .signWith(getSecretKey())
