@@ -1,6 +1,7 @@
 package com.haertz.be.payment.service;
 
 import com.haertz.be.common.exception.base.BaseException;
+import com.haertz.be.common.utils.AuthenticatedUserUtils;
 import com.haertz.be.googlemeet.service.GoogleMeetService;
 import com.haertz.be.payment.dto.*;
 import com.haertz.be.payment.entity.Payment;
@@ -21,8 +22,11 @@ public class BankTransferService {
     private final PaymentSaveService paymentSaveService;
     private final GoogleMeetService googleMeetService;
     private final temp temp;
+    private final AuthenticatedUserUtils userUtils;
 
     public BankTransferDto banktransferrequest(BankTransferRequestDto requestDTO) {
+        Long currentUserId = userUtils.getCurrentUserId();
+
         // 계좌이체 요청 정보가 유효한지 확인(나중에 예약관련된 검증도 추가)
         if (requestDTO == null  || requestDTO.getPartner_order_id() == null) {
             throw new BaseException(PaymentErrorCode.INVALID_PAYMENT_REQUEST);
@@ -32,7 +36,7 @@ public class BankTransferService {
             paymentSaveDto.setPaymentMethod(PaymentMethod.BANK_TRANSFER);
             paymentSaveDto.setPaymentDate(new Date());
             paymentSaveDto.setPaymentStatus(PaymentStatus.PENDING);
-            paymentSaveDto.setUserId(Long.valueOf(requestDTO.getPartner_user_id()));
+            paymentSaveDto.setUserId(currentUserId);
             paymentSaveDto.setTotalAmount(new BigDecimal(requestDTO.getTotal_amount()));
             log.info(paymentSaveDto.toString());
             Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);

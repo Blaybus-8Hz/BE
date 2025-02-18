@@ -1,6 +1,7 @@
 package com.haertz.be.payment.service;
 
 import com.haertz.be.common.exception.base.BaseException;
+import com.haertz.be.common.utils.AuthenticatedUserUtils;
 import com.haertz.be.payment.dto.*;
 import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
@@ -42,8 +43,11 @@ public class KakaoPayService {
     private final RestTemplate restTemplate= new RestTemplate();
     private final PaymentSaveService paymentSaveService;
     private final temp temp;
+    private final AuthenticatedUserUtils userUtils;
 
     public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
+        Long currentUserId = userUtils.getCurrentUserId();
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -51,7 +55,7 @@ public class KakaoPayService {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", cid);
         parameters.put("partner_order_id", requestDTO.getPartner_order_id());
-        parameters.put("partner_user_id", requestDTO.getPartner_user_id());
+        parameters.put("partner_user_id",currentUserId);
         parameters.put("item_name", requestDTO.getItem_name());
         parameters.put("quantity", requestDTO.getQuantity());
         parameters.put("total_amount", requestDTO.getTotal_amount());
@@ -71,6 +75,7 @@ public class KakaoPayService {
         }
     }
     public KakaoPayApproveDto kakaoPayApprove(KakaoPayApproveRequestDto requestDTO) {
+        Long currentUserId = userUtils.getCurrentUserId();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -79,7 +84,7 @@ public class KakaoPayService {
         parameters.put("cid", cid);
         parameters.put("tid", requestDTO.getTid());
         parameters.put("partner_order_id", requestDTO.getPartner_order_id());
-        parameters.put("partner_user_id", requestDTO.getPartner_user_id());
+        parameters.put("partner_user_id",currentUserId);
         parameters.put("pg_token", requestDTO.getPg_token());
 
         HttpEntity<Map<String, Object>> body = new HttpEntity<>(parameters, headers);
@@ -93,7 +98,7 @@ public class KakaoPayService {
             //1. 결제 내역 저장위한 dto 설정
             PaymentSaveDto paymentSaveDto = new PaymentSaveDto();
             paymentSaveDto.setPaymentMethod(PaymentMethod.KAKAO_PAY);
-            paymentSaveDto.setUserId(Long.valueOf(requestDTO.getPartner_user_id()));
+            paymentSaveDto.setUserId(currentUserId);
             paymentSaveDto.setPaymentDate(new Date());
             paymentSaveDto.setTotalAmount(totalAmount);
             paymentSaveDto.setPaymentStatus(PaymentStatus.COMPLETED);
@@ -122,6 +127,7 @@ public class KakaoPayService {
         }
     }
     public KakaoPayCancelDto kakaoPayCancel(KakaoPayCancelRequestDto requestDTO) {
+        Long currentUserId = userUtils.getCurrentUserId();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -130,7 +136,7 @@ public class KakaoPayService {
         parameters.put("cid", cid);
         parameters.put("tid", requestDTO.getTid());
         parameters.put("partner_order_id", requestDTO.getPartnerOrderId());
-        parameters.put("partner_user_id", requestDTO.getPartnerUserId());
+        parameters.put("partner_user_id", currentUserId);
         parameters.put("cancel_amount", requestDTO.getCancelAmount());
         parameters.put("cancel_tax_free_amount", requestDTO.getCancelTaxFreeAmount());
 
