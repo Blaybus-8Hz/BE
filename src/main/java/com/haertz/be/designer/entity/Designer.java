@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -25,23 +27,28 @@ public class Designer extends BaseTimeEntity {
     private MeetingMode meetingMode;
 
     @Column(name = "designer_shop")
-    private String designerShop;
+
+    private String designerShop; //매장주소
 
     @Column(name = "designer_district")
-    private String designerDistrict;
+    private District designerDistrict;
 
+    @ElementCollection(targetClass = Specialty.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "designer_specialty", joinColumns = @JoinColumn(name = "designer_id"))
     @Column(name = "designer_specialty")
-    private String designerSpecialty; //전문분야 - 리스트 수정예정
+    private List<Specialty> designerSpecialty;
 
     @Column(name = "designer_contact_cost")
-    private Integer designerContactCost; //대면가격
+    private Integer designerContactCost; //대면 가격
 
     @Column(name = "designer_untact_cost")
-    private Integer designerUntactCost; //비대면가격
+    private Integer designerUntactCost; //비대면 가격
+
 
     @Column(name = "designer_description")
     private String designerDescription; //디자이너 한줄소개
 
-    @Column(name = "designer_account")
-    private String designerAccount;
+
+
 }
