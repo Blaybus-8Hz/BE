@@ -3,5 +3,5 @@ package com.haertz.be.designer.entity;
 public enum Specialty {
     DYEING, //염색
     BLEACH, //탈색
-    CUT //컷트
+    PERM //펌
 }
