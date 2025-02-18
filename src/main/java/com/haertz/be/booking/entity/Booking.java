@@ -2,6 +2,7 @@ package com.haertz.be.booking.entity;
 
 import com.haertz.be.booking.dto.request.BookingInfoRequest;
 import com.haertz.be.common.entity.BaseTimeEntity;
+import com.haertz.be.designer.entity.Designer;
 import com.haertz.be.payment.entity.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -48,8 +49,9 @@ public class Booking extends BaseTimeEntity {
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private Long designerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "designer_id", nullable = false)
+    private Designer designer;
 
 
 }
