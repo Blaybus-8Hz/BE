@@ -94,9 +94,18 @@ public class DesignerScheduleDomainService {
         List<LocalDate> fullyBookedDates = designerScheduleAdaptor.findFullyBookedDates(designerId, today, endDate, MAX_SLOTS);
 
         return allDates.stream()
-                .filter(date -> !fullyBookedDates.contains(date) || (date.equals(today) && hasAvailableTimesToday(designerId, today)))
+                .filter(date -> {
+                    if (date.equals(today) && LocalTime.now().isAfter(LocalTime.of(19, 30))) {
+                        return false;
+                    }
+                    if (date.equals(today)) {
+                        return hasAvailableTimesToday(designerId, today);
+                    }
+                    return !fullyBookedDates.contains(date);
+                })
                 .collect(Collectors.toList());
     }
+
 
     // 오늘 날짜에서 현재 시간 이후 가능한 시간 있는지 확인
     private boolean hasAvailableTimesToday(Long designerId, LocalDate today) {
