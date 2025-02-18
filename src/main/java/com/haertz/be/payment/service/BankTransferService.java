@@ -54,6 +54,7 @@ public class BankTransferService {
             //String googlemeetlink=googleMeetingLink.getGoogleMeetingLink();
             //bankTransferDto.setGoogleMeetingLink(googlemeetlink);
             bankTransferDto.setCreated_at(new Date());
+            bankTransferDto.setPaymentstatus(savedpayment.getPaymentStatus());
             return bankTransferDto;
         } catch (Exception ex) {
             // 결제 처리 중 오류 발생 시
