@@ -17,10 +17,7 @@ public class BookingAdaptor {
         return bookingRepository.save(booking);
     }
 
-    public Boolean existsByBookingInfo(Long designerId, LocalDate bookingDate, LocalTime bookingTime){
-        return bookingRepository.existsByDesignerDesignerIdAndBookingDateAndBookingTime(designerId, bookingDate, bookingTime);
+    public Boolean existsByDesignerScheduleId(Long designerScheduleId){
+        return bookingRepository.existsByDesignerScheduleId(designerScheduleId);
     }
-
-
-
 }

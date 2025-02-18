@@ -51,5 +51,8 @@ public class Booking extends BaseTimeEntity {
     @JoinColumn(name = "designer_id", nullable = false)
     private Designer designer;
 
+    @Column(nullable = true)
+    private Long designerScheduleId;
+
 
 }
