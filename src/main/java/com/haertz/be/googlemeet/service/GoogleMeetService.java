@@ -7,6 +7,7 @@ import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.googlemeet.dto.GoogleMeetDto;
 import com.haertz.be.googlemeet.dto.GoogleMeetRequestDto;
 import com.haertz.be.googlemeet.exception.GoogleMeetErrorCode;
+import com.haertz.be.googlemeet.repository.DesignerMeetingLinkRepository;
 import com.haertz.be.payment.dto.BankTransferRequestDto;
 import com.haertz.be.payment.dto.PaymentSaveDto;
 import com.haertz.be.payment.entity.PaymentMethod;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ import java.util.UUID;
 public class GoogleMeetService {
     private final RestTemplate restTemplate=new RestTemplate();
     private final UserRepository userRepository; //유저 디비에서 구글 엑세스 토큰 조회
+    private final DesignerMeetingLinkRepository designerMeetingLinkRepository;
 
     //예약엔티티에 저장하기 위한 코드(예약 로직 완성 전 주석처리)
     //private final BookingRepository bookingRepository;
@@ -91,7 +94,7 @@ public class GoogleMeetService {
                         Map<String, Object> entryPoint = entryPointsList.get(0);
                         String googleMeetLink = (String) entryPoint.get("uri");  // 여기에 미팅 링크가 있음
                         GoogleMeetDto googleMeetDto = new GoogleMeetDto();
-                        googleMeetDto.setReservationId(requestDTO.getReservationId());
+                        //googleMeetDto.setDesignerScheduleId(requestDTO.getReservationId());
                         googleMeetDto.setGoogleMeetingLink(googleMeetLink);  // 미팅 링크 반환
                         /*
                         //예약엔티티에 구글미팅 링크 저장(예약 로직 완성 전 주석처리)
@@ -105,5 +108,10 @@ public class GoogleMeetService {
                 }
             }
         }throw new BaseException(GoogleMeetErrorCode.FAILED_TO_CREATE_MEET_LINK);
+    }
+    public GoogleMeetDto getMeetingLink(Long designerId, LocalTime startTime){
+        return designerMeetingLinkRepository.findByDesignerDesignerIdAndStartTime(designerId, startTime)
+                .map(link -> new GoogleMeetDto(link.getGoogleMeetingLink()))
+                .orElse(new GoogleMeetDto(null));
     }
 }
