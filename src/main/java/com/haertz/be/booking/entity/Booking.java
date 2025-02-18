@@ -1,5 +1,6 @@
 package com.haertz.be.booking.entity;
 
+import com.haertz.be.auth.entity.User;
 import com.haertz.be.common.entity.BaseTimeEntity;
 import com.haertz.be.designer.entity.Designer;
 import com.haertz.be.payment.entity.PaymentStatus;
