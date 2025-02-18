@@ -24,8 +24,8 @@ public class BankTransferService {
     private final com.haertz.be.payment.repository.PaymentRepository paymentRepository;
 
     public BankTransferDto banktransferrequest(BankTransferRequestDto requestDTO) {
-        // 계좌이체 요청 정보가 유효한지 확인
-        if (requestDTO == null || requestDTO.getTid() == null || requestDTO.getPartner_order_id() == null) {
+        // 계좌이체 요청 정보가 유효한지 확인(나중에 예약관련된 검증도 추가)
+        if (requestDTO == null  || requestDTO.getPartner_order_id() == null) {
             throw new BaseException(PaymentErrorCode.INVALID_PAYMENT_REQUEST);
         }
         try {

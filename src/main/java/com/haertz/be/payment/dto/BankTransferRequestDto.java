@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class BankTransferRequestDto {
-    private String tid;
     private String partner_order_id;
     private String partner_user_id;
     private String item_name;
