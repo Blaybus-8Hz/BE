@@ -41,7 +41,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(swaggerUrlPatterns).permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/**").permitAll() // 임시로 추가 TODO 삭제 예정
+                        .requestMatchers("/api/auth/signup").permitAll()
+                        .requestMatchers("/api/auth/idToken").permitAll()
+                        .requestMatchers("/api/auth/refresh").permitAll()
                         .requestMatchers("/login/oauth2/**").permitAll()  // OAuth 로그인 경로 허용
                         .anyRequest().authenticated()
                 )
