@@ -2,6 +2,9 @@ package com.haertz.be.booking.controller;
 
 import com.haertz.be.booking.dto.request.BookingInfoRequest;
 import com.haertz.be.booking.dto.response.BookingResponse;
+import com.haertz.be.booking.entity.Booking;
+import com.haertz.be.booking.service.BookingDomainService;
+import com.haertz.be.booking.service.BookingService;
 import com.haertz.be.booking.usecase.BookUseCase;
 import com.haertz.be.booking.usecase.GetAvailableDatesUseCase;
 import com.haertz.be.booking.usecase.GetAvailableTimesUseCase;
@@ -28,6 +31,8 @@ public class BookingController {
     private final GetAvailableDatesUseCase getAvailableDatesUseCase;
     private final GetAvailableTimesUseCase getAvailableTimesUseCase;
 
+    private final BookingService bookingService;
+
     @Operation(summary = "헤어 컨설팅 일정 예약을 요청합니다.")
     @PostMapping
     public SuccessResponse<BookingResponse> book(@RequestBody @Valid BookingInfoRequest bookingInfoRequest) {
@@ -47,5 +52,20 @@ public class BookingController {
     public SuccessResponse<Map<String, List<LocalTime>>> getAvailableTimes(@RequestParam @Min(1) Long designerId, @RequestParam LocalDate bookingDate) {
         List<LocalTime> availableTimes = getAvailableTimesUseCase.execute(designerId, bookingDate);
         return SuccessResponse.of(Collections.singletonMap("예약 가능 시간 리스트: ", availableTimes));
+
+    @Operation(summary = "사용자의 다가오는 예약 내역을 조회합니다.")
+    @GetMapping("/current")
+    public SuccessResponse<Object> getBookings(){
+        List<Booking> bookingList = bookingService.getCurrentBookings();
+
+        return SuccessResponse.of(bookingList);
+    }
+
+    @Operation(summary = "사용자의 지난 예약 내역을 조회합니다.")
+    @GetMapping("/past")
+    public SuccessResponse<Object> getPastBookings(){
+        List<Booking> bookingList = bookingService.getPastBookings();
+
+        return SuccessResponse.of(bookingList);
     }
 }
