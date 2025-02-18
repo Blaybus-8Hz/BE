@@ -1,5 +1,6 @@
 package com.haertz.be.payment.service;
 
+import com.haertz.be.booking.service.DesignerScheduleDomainService;
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.common.utils.AuthenticatedUserUtils;
 import com.haertz.be.googlemeet.service.GoogleMeetService;
@@ -23,6 +24,7 @@ public class BankTransferService {
     private final GoogleMeetService googleMeetService;
     private final temp temp;
     private final AuthenticatedUserUtils userUtils;
+    private final DesignerScheduleDomainService designerScheduleDomainService;
 
     public BankTransferDto banktransferrequest(BankTransferRequestDto requestDTO) {
         Long currentUserId = userUtils.getCurrentUserId();
@@ -77,7 +79,9 @@ public class BankTransferService {
             payment.setPaymentStatus(PaymentStatus.REFUNDED);
             temp.save(payment);
 
-            //디자이너 예약 확정 엔티티에서 관련 데이터 삭제(데이터들로 조회후 삭제 처리 구현)
+            //디자이너스케줄 확정 엔티티에서 관련 데이터 삭제(데이터들로 조회후 삭제 처리 구현)
+            Long designerScheduleId= Long.valueOf(payment.getPartnerOrderId());
+            designerScheduleDomainService.deleteScheduleAfterFailedPayment(designerScheduleId);
 
             //취소 완료 응답 dto 생성
             BankTransferCancelDto bankTransferCancelDto = new BankTransferCancelDto();
