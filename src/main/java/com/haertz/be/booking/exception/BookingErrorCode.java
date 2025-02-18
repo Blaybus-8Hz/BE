@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BookingErrorCode implements BaseErrorCode {
-    INVALID_BOOKING_DATE(400, "BOOKING_400_1", "유효한 예약 날짜가 아닙니다. [예약 가능 범위: 오늘 ~ 3개월 후 말일]"),
+    INVALID_BOOKING_DATE(400, "BOOKING_400_1", "예약 날짜는 오늘 이후여야 합니다."),
     INVALID_BOOKING_TIME(400, "BOOKING_400_2", "예약 시간은 현재 시간 이후여야 합니다."),
     INVALID_TIME_FORMAT(400, "BOOKING_400_3", "예약 시간은 30분 단위여야 합니다."),
     OUT_OF_AVAILABLE_TIME_RANGE(400, "BOOKING_400_4", "예약 가능한 시간 범위를 벗어났습니다."),

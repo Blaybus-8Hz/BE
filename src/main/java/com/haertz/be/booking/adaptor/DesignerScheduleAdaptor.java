@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Adaptor
 @RequiredArgsConstructor
@@ -44,13 +43,5 @@ public class DesignerScheduleAdaptor {
     }
     public void deleteById(Long designerScheduleId) {
         designerScheduleRepository.deleteById(designerScheduleId);
-    }
-
-    public List<LocalDate> findFullyBookedDates(Long designerId, LocalDate startDate, LocalDate endDate, int maxSlots) {
-        return designerScheduleRepository.findFullyBookedDates(designerId, startDate, endDate, maxSlots);
-    }
-
-    public List<LocalTime> findBookedTimes(Long designerId, LocalDate bookingDate) {
-        return designerScheduleRepository.findBookedTimes(designerId, bookingDate);
     }
 }
