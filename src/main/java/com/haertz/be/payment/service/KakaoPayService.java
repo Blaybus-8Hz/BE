@@ -158,13 +158,15 @@ public class KakaoPayService {
             payment.setPaymentStatus(PaymentStatus.REFUNDED);
             temp.save(payment);
 
+            // 디자이너 스케줄 테이블 삭제 함수 호출
+            Long designerScheduleId= Long.valueOf(payment.getPartnerOrderId());
+            designerScheduleDomainService.deleteScheduleAfterFailedPayment(designerScheduleId);
+
             KakaoPayCancelDto kakaoPayCancelDto = new KakaoPayCancelDto();
             kakaoPayCancelDto.setCid(cancelResponse.getCid());
             kakaoPayCancelDto.setTid(cancelResponse.getTid());
             kakaoPayCancelDto.setPaymentstatus(payment.getPaymentStatus());
 
-            // 추후 디자이너 예약 확정 엔티티에서 해당 partner_order_id를 통해 예약 데이터를 삭제로직 구현
-            // designerBookingRepository.deleteByPartnerOrderId(requestDTO.getPartnerOrderId());
             return kakaoPayCancelDto;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 취소 실패", e);
