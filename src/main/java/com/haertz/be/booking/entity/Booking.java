@@ -1,10 +1,10 @@
 package com.haertz.be.booking.entity;
 
-import com.haertz.be.auth.entity.User;
+import com.haertz.be.booking.dto.request.BookingInfoRequest;
 import com.haertz.be.common.entity.BaseTimeEntity;
-import com.haertz.be.designer.entity.Designer;
 import com.haertz.be.payment.entity.PaymentStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -33,14 +33,14 @@ public class Booking extends BaseTimeEntity {
     private LocalTime bookingTime;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus;
-
-    @Enumerated(EnumType.STRING)
-    private MeetingStatus meetingStatus;
+    private BookingStatus bookingStatus; // 예약 확정, 대기중, 취소
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    private PaymentStatus paymentStatus; // 결제 완료, 대기, 환불
+
+    @Enumerated(EnumType.STRING)
+    private MeetingType meetingType; // 컨설팅 방식 결정
 
     @Column(columnDefinition = "TEXT", nullable = true)
     private String requestDetails;
@@ -50,5 +50,6 @@ public class Booking extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Long designerId;
+
 
 }
