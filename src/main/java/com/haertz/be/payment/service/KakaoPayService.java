@@ -1,13 +1,13 @@
-package com.haertz.be.payment.Service;
+package com.haertz.be.payment.service;
 
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.dto.*;
+import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
 import com.haertz.be.payment.entity.PaymentStatus;
 import com.haertz.be.payment.exception.PaymentErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -88,7 +88,6 @@ public class KakaoPayService {
 
             //승인 응답에서 amount 정보 가져오기
             BigDecimal totalAmount=new BigDecimal(approveResponse.getAmount().getTotal());
-
             //1. 결제 내역 저장위한 dto 설정
             PaymentSaveDto paymentSaveDto = new PaymentSaveDto();
             paymentSaveDto.setPaymentMethod(PaymentMethod.KAKAO_PAY);
@@ -99,13 +98,51 @@ public class KakaoPayService {
             paymentSaveDto.setPaymentTransaction(requestDTO.getTid());
             paymentSaveDto.setPartnerOrderId(requestDTO.getPartner_order_id());
             //2.결제내역 저장
-            paymentSaveService.savePayment(paymentSaveDto);
+            Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
 
+            /*구글 미팅링크 생성 관련 코드들
+            GoogleMeetRequestDto googleMeetRequestDto = new GoogleMeetRequestDto();
+            googleMeetRequestDto.setReservationId(1L); //현재는 테스트용. 예약엔티티 설정 후 변경.
+            googleMeetRequestDto.setUserId(Long.valueOf(requestDTO.getPartner_user_id()));
+            googleMeetRequestDto.setGooglemeetaccessToken("ya29.a0AXeO80RuWDPXpOuB--diMWqZ0g2MCyjZol0GiWk9643x9wGR8dwTwfeIJWSefvgdpAR9U8P9jJbCM0VBO-gC4rtstWB3UFUMsDV8AE6okedSaoVNu0BNO8NpxfflqNB6oh3oJW4kHvuJnHPCPly0mZWrY-QU_QhUcLgWd12SrQaCgYKAVoSARISFQHGX2MiLTsc60kevgi5VbtqxCGF_Q0177");
+            GoogleMeetDto googleMeetingLink= googleMeetService.googlemeetrequest(googleMeetRequestDto);
+            log.info(googleMeetingLink.toString());
+            String googlemeetlink=googleMeetingLink.getGoogleMeetingLink();
+            approveResponse.setGoogleMeetingLink(googlemeetlink);
+             */
             approveResponse.setGoogleMeetingLink("구글미팅 링크 생성로직은 아직 구현 전..");
+            approveResponse.setPaymentId(savedpayment.getPaymentId());
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 승인 실패", e);
             throw new BaseException(PaymentErrorCode.PAYMENT_PROCESSING_ERROR);
+        }
+    }
+    public KakaoPayCancelDto kakaoPayCancel(KakaoPayCancelRequestDto requestDTO) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
+        headers.add("Content-type", "application/json");
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("cid", cid);
+        parameters.put("tid", requestDTO.getTid());
+        parameters.put("partner_order_id", requestDTO.getPartnerOrderId());
+        parameters.put("partner_user_id", requestDTO.getPartnerUserId());
+        parameters.put("cancel_amount", requestDTO.getCancelAmount());
+        parameters.put("cancel_tax_free_amount", requestDTO.getCancelTaxFreeAmount());
+
+        HttpEntity<Map<String,Object>>body = new HttpEntity<>(parameters, headers);
+        try {
+            KakaoPayCancelDto cancelResponse = restTemplate.postForObject(
+                    new URI(Host + "/v1/payment/cancel"), body, KakaoPayCancelDto.class);
+            log.info("결제 취소 응답: {}", cancelResponse);
+
+            // 추후 디자이너 예약 확정 엔티티에서 해당 partner_order_id를 통해 예약 데이터를 삭제로직 구현
+            // designerBookingRepository.deleteByPartnerOrderId(requestDTO.getPartnerOrderId());
+            return cancelResponse;
+        } catch (RestClientException | URISyntaxException e) {
+            log.error("결제 취소 실패", e);
+            throw new BaseException(PaymentErrorCode.PAYMENT_CANCELLATION_ERROR);
         }
     }
 }

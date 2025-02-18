@@ -9,6 +9,7 @@ import java.util.Date;
 @Setter
 //계좌이체 후 response반환을 위한 dto
 public class BankTransferDto {
+    private Long paymentId;
     private String googleMeetingLink;
     private Date created_at;
 }

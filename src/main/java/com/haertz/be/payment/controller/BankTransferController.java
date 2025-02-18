@@ -1,6 +1,8 @@
 package com.haertz.be.payment.controller;
 
-import com.haertz.be.payment.Service.BankTransferService;
+import com.haertz.be.payment.service.BankTransferService;
+import com.haertz.be.payment.dto.BankTransferCancelDto;
+import com.haertz.be.payment.dto.BankTransferCancelRequestDto;
 import com.haertz.be.payment.dto.BankTransferDto;
 import com.haertz.be.payment.dto.BankTransferRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,5 +26,11 @@ public class BankTransferController {
     public ResponseEntity<BankTransferDto> bankTransfer(@RequestBody BankTransferRequestDto requestDTO) {
         BankTransferDto bankTransferDto = bankTransferService.banktransferrequest(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(bankTransferDto);
+    }
+    @Operation(summary = "계좌이체 결제 취소 요청을 보냅니다.")
+    @PostMapping("/api/banktransfer/cancel")
+    public ResponseEntity<BankTransferCancelDto> cancelBankTransfer(@RequestBody BankTransferCancelRequestDto requestDTO) {
+        BankTransferCancelDto bankTransferCancelDto = bankTransferService.banktransfercancel(requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bankTransferCancelDto);
     }
 }
