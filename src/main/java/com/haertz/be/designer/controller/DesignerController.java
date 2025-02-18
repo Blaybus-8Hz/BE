@@ -45,6 +45,7 @@ public class DesignerController {
     }
 
 
+    @Operation(summary = "디자이너 전체 칩눌렀을때 리스트를 조회하는 api입니다.. 일단 다갖다줍니다.")
     @GetMapping("/list/all")
     public SuccessResponse<List<Designer>> getAllList(){
         List<Designer> list = designerService.getAll();
