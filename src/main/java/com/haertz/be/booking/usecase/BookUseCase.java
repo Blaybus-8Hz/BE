@@ -29,18 +29,18 @@ public class BookUseCase {
     public BookingResponse execute(BookingInfoRequest bookingInfo) {
         Long currentUserId = userUtils.getCurrentUserId();
 
-        if (!designerScheduleAdaptor.existsByBookingInfo(currentUserId, bookingInfo)) {
+        if (!designerScheduleAdaptor.hasUserBookedSchedule(currentUserId, bookingInfo.designerScheduleId())) {
             throw new BaseException(BookingErrorCode.DESIGNER_SCHEDULE_NOT_FOUND);
         }
 
         DesignerSchedule designerSchedule = designerScheduleAdaptor.isPaymentStatusValid(bookingInfo.designerScheduleId());
 
-        if (bookingAdaptor.existsByBookingInfo(bookingInfo.designerId(), bookingInfo.bookingDate(), bookingInfo.bookingTime())) {
+        if (bookingAdaptor.existsByDesignerScheduleId(bookingInfo.designerScheduleId())) {
             throw new BaseException(BookingErrorCode.BOOKING_ALREADY_REGISTERED);
         }
 
-        Designer designer = designerAdaptor.findByDesignerId(bookingInfo.designerId());
-        Booking booking = bookingDomainService.book(bookingInfo, designer, currentUserId, designerSchedule.getPaymentStatus());
+        Designer designer = designerAdaptor.findByDesignerId(designerSchedule.getDesignerId());
+        Booking booking = bookingDomainService.book(bookingInfo, designer, currentUserId, designerSchedule);
 
         return BookingConverter.toBookingResponse(booking, designer.getDesignerName());
     }
