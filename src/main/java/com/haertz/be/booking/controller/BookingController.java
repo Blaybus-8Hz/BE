@@ -51,7 +51,8 @@ public class BookingController {
     @GetMapping("/available-times")
     public SuccessResponse<Map<String, List<LocalTime>>> getAvailableTimes(@RequestParam @Min(1) Long designerId, @RequestParam LocalDate bookingDate) {
         List<LocalTime> availableTimes = getAvailableTimesUseCase.execute(designerId, bookingDate);
-        return SuccessResponse.of(Collections.singletonMap("예약 가능 시간 리스트: ", availableTimes));
+        return SuccessResponse.of(Collections.singletonMap("예약 가능 시간 리스트: ", availableTimes))
+    };
 
     @Operation(summary = "사용자의 다가오는 예약 내역을 조회합니다.")
     @GetMapping("/current")
