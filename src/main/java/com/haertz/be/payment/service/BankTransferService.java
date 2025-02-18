@@ -54,6 +54,7 @@ public class BankTransferService {
             //String googlemeetlink=googleMeetingLink.getGoogleMeetingLink();
             //bankTransferDto.setGoogleMeetingLink(googlemeetlink);
             bankTransferDto.setCreated_at(new Date());
+            bankTransferDto.setPaymentstatus(savedpayment.getPaymentStatus());
             return bankTransferDto;
         } catch (Exception ex) {
             // 결제 처리 중 오류 발생 시
@@ -69,8 +70,8 @@ public class BankTransferService {
             Payment payment= temp.findByPaymentId(requestDTO.getPaymentId())
                     .orElseThrow(() -> new BaseException(PaymentErrorCode.PAYMENT_NOT_FOUND));
             //결제 status 업데이트
-            //payment.setPaymentStatus(PaymentStatus.REFUNDED);
-            //paymentRepository.save(payment);
+            payment.setPaymentStatus(PaymentStatus.REFUNDED);
+            temp.save(payment);
 
             //디자이너 예약 확정 엔티티에서 관련 데이터 삭제(데이터들로 조회후 삭제 처리 구현)
 
