@@ -1,5 +1,6 @@
 package com.haertz.be.payment.entity;
 
+import com.haertz.be.booking.entity.Booking;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,10 @@ public class Payment {
     @Column(name="payment_id") //DB에서 자동 생성되는 PK 값
     private Long paymentId;
 
-    /* Reservation entity생성후 변경
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="reservation_id",referencedColumnName = "reservation_id")
-    private Reservation reservation
-    */
+    @JoinColumn(name="booking_id",referencedColumnName = "booking_id")
+    private Booking booking;
+
     @Column(nullable = false,name="user_id")
     private Long userId;  //카카오페이시 이걸 partner_user_id로 사용해도 됨?
 
@@ -41,7 +41,7 @@ public class Payment {
     @Column(nullable = false,name="payment_status")
     private PaymentStatus paymentStatus=PaymentStatus.PENDING;
 
-    @Column(name="partner_order_id") //외부 결제 서비스(카카오페이)에서 사용되는 주문 ID.
+    @Column(name="partner_order_id") //결제 건을 식별하는 외부 주문 번호 역할- >디자이너스케줄테이블의 아이디 사용
     private String partnerOrderId;
 
     @Column(name="payment_transaction") //카카오페이의 tid

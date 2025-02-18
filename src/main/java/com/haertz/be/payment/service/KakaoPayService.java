@@ -1,6 +1,9 @@
 package com.haertz.be.payment.service;
 
+import com.haertz.be.booking.dto.request.PreBookingRequest;
+import com.haertz.be.booking.service.DesignerScheduleDomainService;
 import com.haertz.be.common.exception.base.BaseException;
+import com.haertz.be.common.utils.AuthenticatedUserUtils;
 import com.haertz.be.payment.dto.*;
 import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
@@ -42,16 +45,28 @@ public class KakaoPayService {
     private final RestTemplate restTemplate= new RestTemplate();
     private final PaymentSaveService paymentSaveService;
     private final temp temp;
+    private final AuthenticatedUserUtils userUtils;
+    private final DesignerScheduleDomainService designerScheduleDomainService;
 
     public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
+        Long currentUserId = userUtils.getCurrentUserId();
+        //디자이너스케쥴(임시예약정보 생성해 다른 사용자가 예약하지 못하도록
+        PreBookingRequest preBooking = new PreBookingRequest(
+                requestDTO.getDesignerId(),       // 디자이너 ID
+                requestDTO.getBookingDate(),      // 예약 날짜
+                requestDTO.getBookingTime()       // 예약 시간
+        );
+        // 임시 스케줄 생성 후 해당 스케줄의 ID를 반환받음.
+        Long tempScheduleId = designerScheduleDomainService.registerTempSchedule(currentUserId, preBooking);
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", cid);
-        parameters.put("partner_order_id", requestDTO.getPartner_order_id());
-        parameters.put("partner_user_id", requestDTO.getPartner_user_id());
+        parameters.put("partner_order_id",tempScheduleId);
+        parameters.put("partner_user_id",currentUserId);
         parameters.put("item_name", requestDTO.getItem_name());
         parameters.put("quantity", requestDTO.getQuantity());
         parameters.put("total_amount", requestDTO.getTotal_amount());
@@ -64,6 +79,9 @@ public class KakaoPayService {
         try {
             kakaoPayDTO = restTemplate.postForObject(new URI(Host + "/v1/payment/ready"), body, KakaoPayDTO.class);
             log.info("카카오페이 요청 성공:{}}", kakaoPayDTO);
+            if (kakaoPayDTO != null) {
+                kakaoPayDTO.setDesignerScheduleId(String.valueOf(tempScheduleId));
+            }
             return kakaoPayDTO;
         } catch (RestClientException | URISyntaxException e) {
             log.error("카카오페이 요청 실패", e);
@@ -71,6 +89,8 @@ public class KakaoPayService {
         }
     }
     public KakaoPayApproveDto kakaoPayApprove(KakaoPayApproveRequestDto requestDTO) {
+        Long currentUserId = userUtils.getCurrentUserId();
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -78,8 +98,8 @@ public class KakaoPayService {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", cid);
         parameters.put("tid", requestDTO.getTid());
-        parameters.put("partner_order_id", requestDTO.getPartner_order_id());
-        parameters.put("partner_user_id", requestDTO.getPartner_user_id());
+        parameters.put("partner_order_id", requestDTO.getDesignerScheduleId());
+        parameters.put("partner_user_id",currentUserId);
         parameters.put("pg_token", requestDTO.getPg_token());
 
         HttpEntity<Map<String, Object>> body = new HttpEntity<>(parameters, headers);
@@ -93,14 +113,17 @@ public class KakaoPayService {
             //1. 결제 내역 저장위한 dto 설정
             PaymentSaveDto paymentSaveDto = new PaymentSaveDto();
             paymentSaveDto.setPaymentMethod(PaymentMethod.KAKAO_PAY);
-            paymentSaveDto.setUserId(Long.valueOf(requestDTO.getPartner_user_id()));
+            paymentSaveDto.setUserId(currentUserId);
             paymentSaveDto.setPaymentDate(new Date());
             paymentSaveDto.setTotalAmount(totalAmount);
             paymentSaveDto.setPaymentStatus(PaymentStatus.COMPLETED);
             paymentSaveDto.setPaymentTransaction(requestDTO.getTid());
-            paymentSaveDto.setPartnerOrderId(requestDTO.getPartner_order_id());
+            paymentSaveDto.setPartnerOrderId(requestDTO.getDesignerScheduleId());
             //2.결제내역 저장
             Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
+
+            // 디자이너 스케줄의 상태를 변경 메서드 호출
+            designerScheduleDomainService.confirmScheduleAfterPayment(Long.valueOf(requestDTO.getDesignerScheduleId()), PaymentStatus.COMPLETED);
 
             /*구글 미팅링크 생성 관련 코드들
             GoogleMeetRequestDto googleMeetRequestDto = new GoogleMeetRequestDto();
@@ -122,6 +145,7 @@ public class KakaoPayService {
         }
     }
     public KakaoPayCancelDto kakaoPayCancel(KakaoPayCancelRequestDto requestDTO) {
+        Long currentUserId = userUtils.getCurrentUserId();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "SECRET_KEY " + kakaoAdminKey);
         headers.add("Content-type", "application/json");
@@ -130,7 +154,7 @@ public class KakaoPayService {
         parameters.put("cid", cid);
         parameters.put("tid", requestDTO.getTid());
         parameters.put("partner_order_id", requestDTO.getPartnerOrderId());
-        parameters.put("partner_user_id", requestDTO.getPartnerUserId());
+        parameters.put("partner_user_id", currentUserId);
         parameters.put("cancel_amount", requestDTO.getCancelAmount());
         parameters.put("cancel_tax_free_amount", requestDTO.getCancelTaxFreeAmount());
 
@@ -147,13 +171,15 @@ public class KakaoPayService {
             payment.setPaymentStatus(PaymentStatus.REFUNDED);
             temp.save(payment);
 
+            // 디자이너 스케줄 테이블 삭제 함수 호출
+            Long designerScheduleId= Long.valueOf(payment.getPartnerOrderId());
+            designerScheduleDomainService.deleteScheduleAfterFailedPayment(designerScheduleId);
+
             KakaoPayCancelDto kakaoPayCancelDto = new KakaoPayCancelDto();
             kakaoPayCancelDto.setCid(cancelResponse.getCid());
             kakaoPayCancelDto.setTid(cancelResponse.getTid());
             kakaoPayCancelDto.setPaymentstatus(payment.getPaymentStatus());
 
-            // 추후 디자이너 예약 확정 엔티티에서 해당 partner_order_id를 통해 예약 데이터를 삭제로직 구현
-            // designerBookingRepository.deleteByPartnerOrderId(requestDTO.getPartnerOrderId());
             return kakaoPayCancelDto;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 취소 실패", e);
