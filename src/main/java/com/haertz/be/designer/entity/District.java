@@ -3,7 +3,8 @@ package com.haertz.be.designer.entity;
 public enum District {
     SEOUL_ALL("서울 전체"),
     GANGNAM_CHUNGDAM_APGUJUNG("강남/청담/압구정"),
-    HONGDAE_YEONNAM_HAPJEONG("홍대/연남/합정");
+    HONGDAE_YEONNAM_HAPJEONG("홍대/연남/합정"),
+    SEONGSU_GUNDAE("성수/건대");
 
     private final String displayName;
 
