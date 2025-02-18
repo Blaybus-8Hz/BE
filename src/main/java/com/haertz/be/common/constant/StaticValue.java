@@ -7,6 +7,6 @@ public class StaticValue {
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
     public static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
     public static final String BLACKlIST_PREFIX = "blacklist:";
-    public static final int maxSlots = 20;
+    public static final int MAX_SLOTS = 20;
 
 }
