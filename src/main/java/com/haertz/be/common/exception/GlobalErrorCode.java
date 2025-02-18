@@ -13,6 +13,7 @@ public enum GlobalErrorCode implements BaseErrorCode {
 
     BAD_REQUEST_ERROR(400, "GLOBAL_400_1", "잘못된 요청입니다."),
 
+
     INVALID_HTTP_MESSAGE_BODY(400, "GLOBAL_400_2", "HTTP 요청 바디의 형식이 잘못되었습니다."),
     INVALID_REQUEST_CONTENT(400, "GLOBAL_400_3", "잘못된 데이터를 포함한 요청입니다."),
     ACCESS_DENIED_REQUEST(403, "GLOBAL_403", "해당 요청에 접근 권한이 없습니다."),
@@ -28,6 +29,8 @@ public enum GlobalErrorCode implements BaseErrorCode {
     INCORRECT_ISSUER_TOKEN(401, "TOKEN_401_4", "토큰 발급처가 일치하지 않습니다."),
     EXPIRED_TOKEN(401, "TOKEN_401_5", "토큰이 만료되었습니다."),
     NOT_MATCHED_TOKEN_TYPE(401, "TOKEN_401_6", "토큰의 타입이 일치하지 않아 디코딩할 수 없습니다."),
+
+    UNAUTHORIZED_REQUEST_ERROR(403, "GLOBAL_403", "허용되지 않은 요청입니다."),
 
     TOKEN_HEADER_NOT_FOUND(404,"TOKEN_404_1","토큰에 KID가 존재하지 않습니다."),
 

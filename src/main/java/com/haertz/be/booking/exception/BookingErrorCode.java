@@ -12,8 +12,10 @@ public enum BookingErrorCode implements BaseErrorCode {
     INVALID_TIME_FORMAT(400, "BOOKING_400_3", "예약 시간은 30분 단위여야 합니다."),
     OUT_OF_AVAILABLE_TIME_RANGE(400, "BOOKING_400_4", "예약 가능한 시간 범위를 벗어났습니다."),
 
-    DESIGNER_SCHEDULE_NOT_FOUND(404, "SCHEDULE_404","예약된 일정 정보를 찾을 수 없습니다."),
-    BOOKING_ALREADY_REGISTERED(409, "BOOKING_409", "이미 다른 사람이 예약한 시간대입니다.");
+    BOOKING_NOT_FOUND(404, "BOOKING_404","예약 정보를 찾을 수 없습니다."),
+    BOOKING_ALREADY_REGISTERED(409, "BOOKING_409_1", "이미 다른 사람이 예약한 시간대입니다."),
+    BOOKING_ALREADY_CANCELED(409, "BOOKING_409_2", "이미 취소된 예약입니다."),
+    DESIGNER_SCHEDULE_NOT_FOUND(404, "SCHEDULE_404","예약된 일정 정보를 찾을 수 없습니다.");
 
     private final int httpStatus;
     private final String code;
