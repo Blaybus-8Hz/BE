@@ -30,6 +30,7 @@ public class Designer extends BaseTimeEntity {
 
     private String designerShop; //매장주소
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "designer_district")
     private District designerDistrict;
 
