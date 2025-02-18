@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface temp extends JpaRepository<Payment, Long> {
-    //Optional<Payment> findByPartnerOrderId(String partnerOrderId);
+    Optional<Payment> findByPartnerOrderId(String partnerOrderId);
     //Optional<Payment> findByOrderId(String orderId);
     Optional<Payment> findByPaymentId(Long paymentId);
     Optional<Payment> findByPaymentTransaction(String paymentTransaction);

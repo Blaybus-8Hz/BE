@@ -56,7 +56,7 @@ public class BookingController {
         return SuccessResponse.of(Collections.singletonMap("예약 가능 시간 리스트: ", availableTimes));
     }
 
-    @Operation(summary = "선택한 예약 일정을 취소합니다.")
+    @Operation(summary = "선택한 예약 일정을 취소합니다. 환불처리까지 되는 api입니다.")
     @DeleteMapping("/{bookingId}")
     public SuccessResponse<Void> cancelBookingWithRefund(@PathVariable Long bookingId){
         cancelBookingWithRefundUseCase.execute(bookingId);
