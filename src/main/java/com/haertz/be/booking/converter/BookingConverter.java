@@ -44,6 +44,7 @@ public class BookingConverter {
                 .bookingTime(preBookingRequest.bookingTime())
                 .designerId(preBookingRequest.designerId())
                 .paymentStatus(paymentStatus)
+                .isTemporary(true)
                 .userId(userId)
                 .build();
     }
