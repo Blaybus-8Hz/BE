@@ -2,6 +2,7 @@ package com.haertz.be.payment.Service;
 
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.payment.dto.*;
+import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
 import com.haertz.be.payment.entity.PaymentStatus;
 import com.haertz.be.payment.exception.PaymentErrorCode;
@@ -98,7 +99,7 @@ public class KakaoPayService {
             paymentSaveDto.setPaymentTransaction(requestDTO.getTid());
             paymentSaveDto.setPartnerOrderId(requestDTO.getPartner_order_id());
             //2.결제내역 저장
-            paymentSaveService.savePayment(paymentSaveDto);
+            Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
 
             /*구글 미팅링크 생성 관련 코드들
             GoogleMeetRequestDto googleMeetRequestDto = new GoogleMeetRequestDto();
@@ -111,6 +112,7 @@ public class KakaoPayService {
             approveResponse.setGoogleMeetingLink(googlemeetlink);
              */
             approveResponse.setGoogleMeetingLink("구글미팅 링크 생성로직은 아직 구현 전..");
+            approveResponse.setPaymentId(savedpayment.getPaymentId());
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 승인 실패", e);

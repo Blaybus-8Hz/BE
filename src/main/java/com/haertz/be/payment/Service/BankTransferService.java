@@ -36,7 +36,7 @@ public class BankTransferService {
             paymentSaveDto.setUserId(Long.valueOf(requestDTO.getPartner_user_id()));
             paymentSaveDto.setTotalAmount(new BigDecimal(requestDTO.getTotal_amount()));
             log.info(paymentSaveDto.toString());
-            paymentSaveService.savePayment(paymentSaveDto);
+            Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
             /*
             //구글 미팅 링크 생성
             GoogleMeetRequestDto googleMeetRequestDto = new GoogleMeetRequestDto();
@@ -50,6 +50,7 @@ public class BankTransferService {
 
             // 계좌이체 후 DTO 반환
             BankTransferDto bankTransferDto = new BankTransferDto();
+            bankTransferDto.setPaymentId(savedpayment.getPaymentId());
             bankTransferDto.setGoogleMeetingLink("구글미팅 링크 생성로직은 아직 구현 전..");
             //String googlemeetlink=googleMeetingLink.getGoogleMeetingLink();
             //bankTransferDto.setGoogleMeetingLink(googlemeetlink);
