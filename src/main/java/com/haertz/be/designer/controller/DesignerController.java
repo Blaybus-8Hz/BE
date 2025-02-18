@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class DesignerController {
 
     private final DesignerService designerService;
-    
+
     @Operation(summary = "디자이너 상세정보를 조회하는 api입니다.")
     @GetMapping("/api/designer/{designerId}")
     public SuccessResponse<DesignerResponse> getDesigners(@PathVariable("designerId") Long designerId){
         DesignerResponse response = designerService.getDesignerResponse(designerId);
         return SuccessResponse.of(response);
     }
-}
+
+
+
+
 }
