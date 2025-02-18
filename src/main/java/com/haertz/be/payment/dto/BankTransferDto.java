@@ -1,5 +1,6 @@
 package com.haertz.be.payment.dto;
 
+import com.haertz.be.payment.entity.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,4 +13,5 @@ public class BankTransferDto {
     private Long paymentId;
     private String googleMeetingLink;
     private Date created_at;
+    private PaymentStatus paymentstatus;
 }
