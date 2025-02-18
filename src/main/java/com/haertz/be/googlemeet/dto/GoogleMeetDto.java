@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class GoogleMeetDto {
-    private Long reservationId;
+    private Long designerScheduleId;
     private String googleMeetingLink;
 
 }
