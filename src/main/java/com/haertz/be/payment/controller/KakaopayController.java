@@ -44,7 +44,7 @@ public class KakaopayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
-    @Operation(summary="카카오페이 결제 취소 요청을 보냅니다.")
+    @Operation(summary="카카오페이 결제 취소 요청을 보냅니다. 결제가 완료된(승인된) 건에 대해 환불 처리를 하기 위해 Kakao Pay의 결제 취소 API를 호출하는 로직입니다.")
     @PostMapping("/api/kakaPay/cancel")
     public ResponseEntity<KakaoPayCancelDto> kakaoPaycancel(@RequestBody KakaoPayCancelRequestDto requestDTO){
         KakaoPayCancelDto approveResponse=kakaoPayService.kakaoPayCancel(requestDTO);
