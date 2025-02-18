@@ -27,10 +27,13 @@ public class BankTransferController {
         BankTransferDto bankTransferDto = bankTransferService.banktransferrequest(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(bankTransferDto);
     }
+    /*
     @Operation(summary = "계좌이체 결제 취소 요청을 보냅니다.")
     @PostMapping("/api/banktransfer/cancel")
     public ResponseEntity<BankTransferCancelDto> cancelBankTransfer(@RequestBody BankTransferCancelRequestDto requestDTO) {
         BankTransferCancelDto bankTransferCancelDto = bankTransferService.banktransfercancel(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(bankTransferCancelDto);
     }
+
+     */
 }

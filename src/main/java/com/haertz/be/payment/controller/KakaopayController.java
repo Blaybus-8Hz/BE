@@ -22,10 +22,6 @@ public class KakaopayController {
     public ResponseEntity<KakaoPayDTO> kakaoPayGet(@RequestBody KakaoPayRequestDTO requestDTO){
         log.info("결제하기 버튼 클릭 시 카카오페이 결제 요청");
 
-        /*프론트에서 유저 아이디 넘겨주는게 아닌, 토큰에서 유저정보 가져오는 코드로 변경 필요.(ex.JWT토큰 디코딩)
-        코드...
-         */
-
         KakaoPayDTO kakaoPayDTO=kakaoPayService.kakaoPayReady(requestDTO);
         if(kakaoPayDTO!=null){
             return ResponseEntity.ok(kakaoPayDTO);
@@ -44,6 +40,7 @@ public class KakaopayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+    /*
     @Operation(summary="카카오페이 결제 취소 요청을 보냅니다. 결제가 완료된(승인된) 건에 대해 환불 처리를 하기 위해 Kakao Pay의 결제 취소 API를 호출하는 로직입니다.")
     @PostMapping("/api/kakaPay/cancel")
     public ResponseEntity<KakaoPayCancelDto> kakaoPaycancel(@RequestBody KakaoPayCancelRequestDto requestDTO){
@@ -54,4 +51,6 @@ public class KakaopayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+     */
 }
