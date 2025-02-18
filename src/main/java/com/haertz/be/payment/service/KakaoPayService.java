@@ -54,7 +54,7 @@ public class KakaoPayService {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", cid);
-        parameters.put("partner_order_id", requestDTO.getPartner_order_id());
+        parameters.put("partner_order_id", requestDTO.getDesignerScheduleId());
         parameters.put("partner_user_id",currentUserId);
         parameters.put("item_name", requestDTO.getItem_name());
         parameters.put("quantity", requestDTO.getQuantity());
@@ -83,7 +83,7 @@ public class KakaoPayService {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", cid);
         parameters.put("tid", requestDTO.getTid());
-        parameters.put("partner_order_id", requestDTO.getPartner_order_id());
+        parameters.put("partner_order_id", requestDTO.getDesignerScheduleId());
         parameters.put("partner_user_id",currentUserId);
         parameters.put("pg_token", requestDTO.getPg_token());
 
@@ -103,7 +103,7 @@ public class KakaoPayService {
             paymentSaveDto.setTotalAmount(totalAmount);
             paymentSaveDto.setPaymentStatus(PaymentStatus.COMPLETED);
             paymentSaveDto.setPaymentTransaction(requestDTO.getTid());
-            paymentSaveDto.setPartnerOrderId(requestDTO.getPartner_order_id());
+            paymentSaveDto.setPartnerOrderId(requestDTO.getDesignerScheduleId());
             //2.결제내역 저장
             Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
 
