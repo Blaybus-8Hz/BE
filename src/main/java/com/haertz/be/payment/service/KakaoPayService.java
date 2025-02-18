@@ -1,9 +1,14 @@
 package com.haertz.be.payment.service;
 
 import com.haertz.be.booking.dto.request.PreBookingRequest;
+import com.haertz.be.booking.entity.DesignerSchedule;
+import com.haertz.be.booking.exception.BookingErrorCode;
+import com.haertz.be.booking.repository.DesignerScheduleRepository;
 import com.haertz.be.booking.service.DesignerScheduleDomainService;
 import com.haertz.be.common.exception.base.BaseException;
 import com.haertz.be.common.utils.AuthenticatedUserUtils;
+import com.haertz.be.googlemeet.dto.GoogleMeetDto;
+import com.haertz.be.googlemeet.service.GoogleMeetService;
 import com.haertz.be.payment.dto.*;
 import com.haertz.be.payment.entity.Payment;
 import com.haertz.be.payment.entity.PaymentMethod;
@@ -47,6 +52,8 @@ public class KakaoPayService {
     private final temp temp;
     private final AuthenticatedUserUtils userUtils;
     private final DesignerScheduleDomainService designerScheduleDomainService;
+    private final GoogleMeetService googleMeetService;
+    private final DesignerScheduleRepository designerScheduleRepository;
 
     public KakaoPayDTO kakaoPayReady(KakaoPayRequestDTO requestDTO) {
         Long currentUserId = userUtils.getCurrentUserId();
@@ -110,7 +117,7 @@ public class KakaoPayService {
 
             //승인 응답에서 amount 정보 가져오기
             BigDecimal totalAmount=new BigDecimal(approveResponse.getAmount().getTotal());
-            //1. 결제 내역 저장위한 dto 설정
+            // 결제 내역 저장위한 dto 설정
             PaymentSaveDto paymentSaveDto = new PaymentSaveDto();
             paymentSaveDto.setPaymentMethod(PaymentMethod.KAKAO_PAY);
             paymentSaveDto.setUserId(currentUserId);
@@ -119,25 +126,22 @@ public class KakaoPayService {
             paymentSaveDto.setPaymentStatus(PaymentStatus.COMPLETED);
             paymentSaveDto.setPaymentTransaction(requestDTO.getTid());
             paymentSaveDto.setPartnerOrderId(requestDTO.getDesignerScheduleId());
-            //2.결제내역 저장
+            // 결제내역 저장
             Payment savedpayment=paymentSaveService.savePayment(paymentSaveDto);
 
             // 디자이너 스케줄의 상태를 변경 메서드 호출
             designerScheduleDomainService.confirmScheduleAfterPayment(Long.valueOf(requestDTO.getDesignerScheduleId()), PaymentStatus.COMPLETED);
 
-            /*구글 미팅링크 생성 관련 코드들
-            GoogleMeetRequestDto googleMeetRequestDto = new GoogleMeetRequestDto();
-            googleMeetRequestDto.setReservationId(1L); //현재는 테스트용. 예약엔티티 설정 후 변경.
-            googleMeetRequestDto.setUserId(Long.valueOf(requestDTO.getPartner_user_id()));
-            googleMeetRequestDto.setGooglemeetaccessToken("ya29.a0AXeO80RuWDPXpOuB--diMWqZ0g2MCyjZol0GiWk9643x9wGR8dwTwfeIJWSefvgdpAR9U8P9jJbCM0VBO-gC4rtstWB3UFUMsDV8AE6okedSaoVNu0BNO8NpxfflqNB6oh3oJW4kHvuJnHPCPly0mZWrY-QU_QhUcLgWd12SrQaCgYKAVoSARISFQHGX2MiLTsc60kevgi5VbtqxCGF_Q0177");
-            GoogleMeetDto googleMeetingLink= googleMeetService.googlemeetrequest(googleMeetRequestDto);
-            log.info(googleMeetingLink.toString());
-            String googlemeetlink=googleMeetingLink.getGoogleMeetingLink();
-            approveResponse.setGoogleMeetingLink(googlemeetlink);
-             */
-            approveResponse.setGoogleMeetingLink("구글미팅 링크 생성로직은 아직 구현 전..");
+            // 디자이너 스케줄을 조회해서, 해당 스케줄의 디자이너 ID와 예약 시간으로 구글 미팅 링크 조회
+            DesignerSchedule schedule = designerScheduleRepository.findById(
+                            Long.valueOf(requestDTO.getDesignerScheduleId()))
+                    .orElseThrow(() -> new BaseException(BookingErrorCode.DESIGNER_SCHEDULE_NOT_FOUND));
+            GoogleMeetDto meetDto=googleMeetService.getMeetingLink(schedule.getDesignerId(),schedule.getBookingTime());
+            String googleMeetlink=meetDto.getGoogleMeetingLink();
+
             approveResponse.setPaymentId(savedpayment.getPaymentId());
             approveResponse.setPaymentstatus(savedpayment.getPaymentStatus());
+            approveResponse.setGoogleMeetingLink(googleMeetlink);
             return approveResponse;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 승인 실패", e);
