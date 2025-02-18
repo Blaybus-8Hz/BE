@@ -7,12 +7,14 @@ import com.haertz.be.booking.entity.MeetingType;
 import com.haertz.be.payment.entity.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @AllArgsConstructor
 @Builder
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookingResponse {
 

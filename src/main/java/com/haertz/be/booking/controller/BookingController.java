@@ -37,7 +37,7 @@ public class BookingController {
 
     @Operation(summary = "헤어 컨설팅 일정 예약을 요청합니다.")
     @PostMapping
-    public SuccessResponse<BookingResponse> book(@RequestBody @Valid BookingInfoRequest bookingInfoRequest) {
+    public SuccessResponse<Object> book(@RequestBody @Valid BookingInfoRequest bookingInfoRequest) {
         BookingResponse bookingResponse = bookUseCase.execute(bookingInfoRequest);
         return SuccessResponse.of(bookingResponse);
     }
