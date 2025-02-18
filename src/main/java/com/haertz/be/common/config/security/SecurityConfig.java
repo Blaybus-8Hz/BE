@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers(swaggerUrlPatterns).permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/signup").permitAll()
-                        .requestMatchers("/api/auth/idToken").permitAll()
+                        .requestMatchers("/api/auth/idtoken").permitAll()
                         .requestMatchers("/api/auth/refresh").permitAll()
                         .requestMatchers("/login/oauth2/**").permitAll()  // OAuth 로그인 경로 허용
                         .anyRequest().authenticated()
@@ -75,7 +75,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "https://haertz.kr","https://www.haertz.kr", "https://haertz.kr/", "https://backend.haertz.kr","http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8081", "https://haertz.kr","https://www.haertz.kr", "https://haertz.kr/", "https://backend.haertz.kr","http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
