@@ -19,4 +19,8 @@ public class Designer extends BaseTimeEntity {
 
     @Column(name = "designer_name")
     private String designerName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "meeting_mode", nullable = false)
+    private MeetingMode meetingMode;
 }
