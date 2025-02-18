@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class DesignerResponse {
 
-    private List<Specialty> designerSpecialty;
+    private Specialty designerSpecialty;
     private String designerName;
     private String designerShop;
     private Integer designerUntactCost;// 가격
