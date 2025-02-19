@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,6 +30,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -187,6 +189,20 @@ public class KakaoPayService {
             return kakaoPayCancelDto;
         } catch (RestClientException | URISyntaxException e) {
             log.error("결제 취소 실패", e);
+            throw new BaseException(PaymentErrorCode.PAYMENT_CANCELLATION_ERROR);
+        }
+    }
+    //카카오페이 결제 완료 전 취소할 경우.
+    @Transactional
+    public void payingcancel(PayingCancelRequestDto requestDTO){
+        if (requestDTO == null || requestDTO.getDesignerScheduleId() == null) {
+            throw new BaseException(PaymentErrorCode.INVALID_PAYMENT_REQUEST);
+        }try {
+            //결제 진행중인 경우 payment존재 안함-> 삭제할 필요 없음
+            //결제 완료 전이므로 단순히 디자이너 스케줄 테이블만 삭제처리
+            Long designerScheduleId = requestDTO.getDesignerScheduleId();
+            designerScheduleDomainService.deleteScheduleAfterFailedPayment(designerScheduleId);
+        } catch (Exception ex) {
             throw new BaseException(PaymentErrorCode.PAYMENT_CANCELLATION_ERROR);
         }
     }

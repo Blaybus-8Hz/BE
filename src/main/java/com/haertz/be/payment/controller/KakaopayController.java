@@ -1,5 +1,6 @@
 package com.haertz.be.payment.controller;
 
+import com.haertz.be.common.response.SuccessResponse;
 import com.haertz.be.payment.service.KakaoPayService;
 import com.haertz.be.payment.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +43,7 @@ public class KakaopayController {
     }
     /*
     @Operation(summary="카카오페이 결제 취소 요청을 보냅니다. 결제가 완료된(승인된) 건에 대해 환불 처리를 하기 위해 Kakao Pay의 결제 취소 API를 호출하는 로직입니다.")
-    @PostMapping("/api/kakaPay/cancel")
+    @PostMapping("/api/kakaPay/refund")
     public ResponseEntity<KakaoPayCancelDto> kakaoPaycancel(@RequestBody KakaoPayCancelRequestDto requestDTO){
         KakaoPayCancelDto approveResponse=kakaoPayService.kakaoPayCancel(requestDTO);
         if (approveResponse != null) {
@@ -53,4 +54,10 @@ public class KakaopayController {
     }
 
      */
+    @Operation(summary="카카오페이 결제중(결제 완료하기 전임) 취소를 선택할경우, 결제 완료 후 취소는 예약삭제 api이용.")
+    @PostMapping("/api/kakaoPay/cancel")
+    public SuccessResponse payingcancel(@RequestBody PayingCancelRequestDto requestDTO){
+        kakaoPayService.payingcancel(requestDTO);
+        return SuccessResponse.empty();
+    }
 }
