@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -43,14 +45,17 @@ public class DesignerController {
         return SuccessResponse.of(resultList);
     }
 
-
-    @Operation(summary = "디자이너 전체 칩눌렀을때 리스트를 조회하는 api입니다.. 일단 다갖다줍니다.")
+    @Operation(summary = "디자이너 전체 리스트를 조회하는 API (페이징 지원).")
     @GetMapping("/list/all")
-    public SuccessResponse<List<Designer>> getAllList(){
-        List<Designer> list = designerService.getAll();
-        return SuccessResponse.of(list);
-    }
+    public SuccessResponse<List<Designer>> getAllList(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
 
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Designer> designerPage = designerService.getAll(pageRequest);
+
+        return SuccessResponse.of(designerPage.getContent());
+    }
 
     @Operation(
             summary = "지역별로 디자이너 리스트를 조회하는 API입니다.",
