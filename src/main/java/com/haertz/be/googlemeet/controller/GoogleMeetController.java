@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+/*
 @Tag(name = "구글 미팅 링크 생성 API", description = "구글미팅 링크생성 테스트를 위한 백엔드 테스트용 API입니다.")
 @RestController
 @RequiredArgsConstructor
@@ -27,3 +27,5 @@ public class GoogleMeetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(googleMeetDto);
     }
 }
+
+ */
