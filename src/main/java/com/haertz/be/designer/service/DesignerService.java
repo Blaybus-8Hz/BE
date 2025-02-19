@@ -48,11 +48,13 @@ public class DesignerService {
         return designerRepository.findByMeetingMode(meetingMode);
     }
 
-    public List<Designer> getFilteredDesigners(List<District> districts, List<MeetingMode> meetingModes, List<Specialty> categories) {
+
+    public List<Designer> filterDesigners(List<String> districts, List<String> meetingModes, List<Specialty> categories) {
         return designerRepository.findAll().stream()
                 .filter(designer -> (districts == null || districts.isEmpty() || districts.contains(designer.getDesignerDistrict())))
                 .filter(designer -> (meetingModes == null || meetingModes.isEmpty() || meetingModes.contains(designer.getMeetingMode())))
-                .filter(designer -> (categories == null || categories.isEmpty() || categories.contains(designer.getDesignerSpecialty()))) // 모든 카테고리를 포함해야 함
+                .filter(designer -> (categories == null || categories.isEmpty() ||
+                        categories.stream().anyMatch(category -> category.equals(designer.getDesignerSpecialty())))) // OR 조건 적용
                 .collect(Collectors.toList());
     }
 
