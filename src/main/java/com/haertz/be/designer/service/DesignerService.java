@@ -14,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +36,8 @@ public class DesignerService {
         return designerRepository.findByDesignerSpecialty(categories);
     }
 
-    public Page<Designer> getAll(Pageable pageable) {
-        return designerRepository.findAll(pageable);
+    public List<Designer> getAll() {
+        return designerRepository.findAll();
     }
 
     public List<Designer> getListByDistrict(District district){
@@ -44,6 +46,14 @@ public class DesignerService {
 
     public List<Designer> getListByMeetingMode(MeetingMode meetingMode){
         return designerRepository.findByMeetingMode(meetingMode);
+    }
+
+    public List<Designer> getFilteredDesigners(List<District> districts, List<MeetingMode> meetingModes, List<Specialty> categories) {
+        return designerRepository.findAll().stream()
+                .filter(designer -> (districts == null || districts.isEmpty() || districts.contains(designer.getDesignerDistrict())))
+                .filter(designer -> (meetingModes == null || meetingModes.isEmpty() || meetingModes.contains(designer.getMeetingMode())))
+                .filter(designer -> (categories == null || categories.isEmpty() || categories.contains(designer.getDesignerSpecialty()))) // 모든 카테고리를 포함해야 함
+                .collect(Collectors.toList());
     }
 
 }
