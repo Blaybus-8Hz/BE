@@ -49,6 +49,9 @@ public class Designer extends BaseTimeEntity {
     @Column(name = "designer_description")
     private String designerDescription; //디자이너 한줄소개
 
+    // 새로운 이미지 URL 컬럼 추가
+    @Column(name = "designer_url")
+    private String imageUrl;
 
 
 }
