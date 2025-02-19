@@ -74,7 +74,7 @@ public class DesignerController {
                 resultList.addAll(designersByCategory);
             }
         }
-        
+
         List<Designer> pagedResultList = resultList.stream()
                 .skip((long) page * size)
                 .limit(size)
@@ -83,13 +83,6 @@ public class DesignerController {
         return SuccessResponse.of(pagedResultList);
     }
 
-//    @Operation(summary = "디자이너의 이미지 URL을 조회하는 API입니다.")
-//    @GetMapping("/{designerId}/image")
-//    public SuccessResponse<String> getDesignerImageUrl(@PathVariable Long designerId) {
-//        Designer designer = designerService.getDesignerResponse(designerId);
-//        String imageUrl = designer.getImageUrl();  // S3 URL을 반환
-//        return SuccessResponse.of(imageUrl);
-//    }
 
 
 }
