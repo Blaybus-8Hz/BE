@@ -3,12 +3,13 @@ package com.haertz.be.designer.controller;
 import com.haertz.be.common.response.SuccessResponse;
 import com.haertz.be.designer.dto.response.DesignerResponse;
 import com.haertz.be.designer.entity.Designer;
+import com.haertz.be.designer.entity.District;
+import com.haertz.be.designer.entity.MeetingMode;
 import com.haertz.be.designer.entity.Specialty;
 import com.haertz.be.designer.service.DesignerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,35 @@ public class DesignerController {
         List<Designer> list = designerService.getAll();
         return SuccessResponse.of(list);
     }
+
+
+    @Operation(
+            summary = "지역로 디자이너 리스트를 조회하는 API입니다.",
+            parameters = {
+                    @Parameter(name = "category", description = "디자이너 리스트를 조회할 카테고리(SEOUL_ALL(\"서울 전체\"),\n" +
+                            "    GANGNAM_CHUNGDAM_APGUJUNG(\"강남/청담/압구정\"),\n" +
+                            "    HONGDAE_YEONNAM_HAPJEONG(\"홍대/연남/합정\"),\n" +
+                            "    SEONGSU_GUNDAE(\"성수/건대\");)", required = true)
+            }
+    )
+    @GetMapping("/list/{district}")
+    public SuccessResponse<List<Designer>> getDesignerList(@PathVariable("district") District district) {
+        List<Designer> list = designerService.getListByDistrict(district);
+        return SuccessResponse.of(list);
+    }
+
+    @Operation(
+            summary = "대면/비대면 별로 디자이너 리스트를 조회하는 API입니다.",
+            parameters = {
+                    @Parameter(name = "category", description = "디자이너 리스트를 조회할 카테고리 FACE_TO_FACE : 대면만, BOTH : 둘다 , REMOTE : 비대면만하는", required = true)
+            }
+    )
+    @GetMapping("/list/{meetingmode}")
+    public SuccessResponse<List<Designer>> getDesignerList(@PathVariable("meetingmode")MeetingMode meetingMode) {
+        List<Designer> list = designerService.getListByMeetingMode(meetingMode);
+        return SuccessResponse.of(list);
+    }
+
 
 
 }
