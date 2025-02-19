@@ -17,7 +17,6 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Builder
-@Setter
 @AllArgsConstructor
 @Table(name = "designer_schedule", uniqueConstraints = @UniqueConstraint(columnNames = {"designer_id", "booking_date", "booking_time"}))
 public class DesignerSchedule extends BaseTimeEntity {
