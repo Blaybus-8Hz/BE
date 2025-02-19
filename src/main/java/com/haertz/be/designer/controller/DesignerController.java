@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/designer")
@@ -33,66 +34,62 @@ public class DesignerController {
         return SuccessResponse.of(response);
     }
 
-    @GetMapping("/list")
-    public SuccessResponse<List<Designer>> getDesignerList(@RequestParam("categories") List<Specialty> categories) {
-        List<Designer> resultList = new ArrayList<>();
 
-        for (Specialty category : categories) {
-            List<Designer> designers = designerService.getDesignerResponseByCategories(category);
-            resultList.addAll(designers);
-        }
-
-        return SuccessResponse.of(resultList);
-    }
-
-    @Operation(summary = "디자이너 전체 리스트를 조회하는 API (페이징 지원).")
-    @GetMapping("/list/all")
-    public SuccessResponse<List<Designer>> getAllList(
+    @Operation(
+            summary = "지역, 대면/비대면, 카테고리 조건으로 디자이너 리스트를 조회하는 API입니다.",
+            parameters = {
+                    @Parameter(name = "districts", description = "디자이너 리스트를 조회할 지역 목록 (SEOUL_ALL, GANGNAM_CHUNGDAM_APGUJUNG, HONGDAE_YEONNAM_HAPJEONG, SEONGSU_GUNDAE)", required = false),
+                    @Parameter(name = "meetingModes", description = "디자이너 리스트를 조회할 대면/비대면 조건 (FACE_TO_FACE, BOTH, REMOTE)", required = false),
+                    @Parameter(name = "categories", description = "디자이너 리스트를 조회할 카테고리 (예: SEOUL_ALL, GANGNAM_CHUNGDAM_APGUJUNG)", required = false)
+            }
+    )
+    @GetMapping("/list/filter")
+    public SuccessResponse<List<Designer>> getFilteredDesignerList(
+            @RequestParam(value = "districts", required = false) List<District> districts,
+            @RequestParam(value = "meetingModes", required = false) List<MeetingMode> meetingModes,
+            @RequestParam(value = "categories", required = false) List<Specialty> categories,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Designer> designerPage = designerService.getAll(pageRequest);
-
-        return SuccessResponse.of(designerPage.getContent());
-    }
-
-    @Operation(
-            summary = "지역별로 디자이너 리스트를 조회하는 API입니다.",
-            parameters = {
-                    @Parameter(name = "districts", description = "디자이너 리스트를 조회할 지역 목록 (SEOUL_ALL, GANGNAM_CHUNGDAM_APGUJUNG, HONGDAE_YEONNAM_HAPJEONG, SEONGSU_GUNDAE)", required = true)
-            }
-    )
-    @GetMapping("/list/by-district")
-    public SuccessResponse<List<Designer>> getDesignerListByDistricts(@RequestParam("districts") List<District> districts) {
         List<Designer> resultList = new ArrayList<>();
 
-        for (District district : districts) {
-            List<Designer> designers = designerService.getListByDistrict(district);
-            resultList.addAll(designers);
-        }
-
-        return SuccessResponse.of(resultList);
-    }
-
-    @Operation(
-            summary = "대면/비대면 별로 디자이너 리스트를 조회하는 API입니다.",
-            parameters = {
-                    @Parameter(name = "meetingModes", description = "디자이너 리스트를 조회할 카테고리 (FACE_TO_FACE, BOTH, REMOTE)", required = true)
+        if (districts != null && !districts.isEmpty()) {
+            for (District district : districts) {
+                List<Designer> designersByDistrict = designerService.getListByDistrict(district);
+                resultList.addAll(designersByDistrict);
             }
-    )
-    @GetMapping("/list/by-meetingmode")
-    public SuccessResponse<List<Designer>> getDesignerListByMeetingModes(@RequestParam("meetingModes") List<MeetingMode> meetingModes) {
-        List<Designer> resultList = new ArrayList<>();
-
-        for (MeetingMode meetingMode : meetingModes) {
-            List<Designer> designers = designerService.getListByMeetingMode(meetingMode);
-            resultList.addAll(designers);
         }
 
-        return SuccessResponse.of(resultList);
+        if (meetingModes != null && !meetingModes.isEmpty()) {
+            for (MeetingMode meetingMode : meetingModes) {
+                List<Designer> designersByMeetingMode = designerService.getListByMeetingMode(meetingMode);
+                resultList.addAll(designersByMeetingMode);
+            }
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            for (Specialty category : categories) {
+                List<Designer> designersByCategory = designerService.getDesignerResponseByCategories(category);
+                resultList.addAll(designersByCategory);
+            }
+        }
+        
+        List<Designer> pagedResultList = resultList.stream()
+                .skip((long) page * size)
+                .limit(size)
+                .collect(Collectors.toList());
+
+        return SuccessResponse.of(pagedResultList);
     }
 
+//    @Operation(summary = "디자이너의 이미지 URL을 조회하는 API입니다.")
+//    @GetMapping("/{designerId}/image")
+//    public SuccessResponse<String> getDesignerImageUrl(@PathVariable Long designerId) {
+//        Designer designer = designerService.getDesignerResponse(designerId);
+//        String imageUrl = designer.getImageUrl();  // S3 URL을 반환
+//        return SuccessResponse.of(imageUrl);
+//    }
 
 
 }
