@@ -19,4 +19,5 @@ public class DesignerResponse {
     private Integer designerContactCost;
     private String designerDescription; //디자이너 한줄소개
     private MeetingType meetingMode; //대면상담, 비대면 상담 여부
+    private String imageUrl;
 }
