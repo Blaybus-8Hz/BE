@@ -49,7 +49,7 @@ public class DesignerService {
     }
 
 
-    public List<Designer> filterDesigners(List<String> districts, List<String> meetingModes, List<Specialty> categories) {
+    public List<Designer> filterDesigners(List<District> districts, List<MeetingMode> meetingModes, List<Specialty> categories) {
         return designerRepository.findAll().stream()
                 .filter(designer -> (districts == null || districts.isEmpty() || districts.contains(designer.getDesignerDistrict())))
                 .filter(designer -> (meetingModes == null || meetingModes.isEmpty() || meetingModes.contains(designer.getMeetingMode())))

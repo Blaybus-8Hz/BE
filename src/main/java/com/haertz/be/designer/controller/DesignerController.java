@@ -52,7 +52,7 @@ public class DesignerController {
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
 
-        List<Designer> filteredDesigners = designerService.getFilteredDesigners(districts, meetingModes, categories);
+        List<Designer> filteredDesigners = designerService.filterDesigners(districts,meetingModes,categories);
 
         // 페이징 처리
         List<Designer> pagedResultList = filteredDesigners.stream()
