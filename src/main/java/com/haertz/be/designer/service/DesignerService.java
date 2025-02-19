@@ -2,9 +2,12 @@ package com.haertz.be.designer.service;
 
 import com.haertz.be.designer.dto.response.DesignerResponse;
 import com.haertz.be.designer.entity.Designer;
+import com.haertz.be.designer.entity.District;
+import com.haertz.be.designer.entity.MeetingMode;
 import com.haertz.be.designer.entity.Specialty;
 import com.haertz.be.designer.repository.DesignerRepository;
 import lombok.RequiredArgsConstructor;
+import org.bouncycastle.pqc.crypto.DigestingStateAwareMessageSigner;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,4 +35,13 @@ public class DesignerService {
     public List<Designer> getAll(){
         return designerRepository.findAll();
     }
+
+    public List<Designer> getListByDistrict(District district){
+        return designerRepository.findByDesignerDistrict(district);
+    }
+
+    public List<Designer> getListByMeetingMode(MeetingMode meetingMode){
+        return designerRepository.findByMeetingMode(meetingMode);
+    }
+
 }
