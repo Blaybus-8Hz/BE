@@ -51,37 +51,18 @@ public class DesignerController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
-        PageRequest pageRequest = PageRequest.of(page, size);
-        List<Designer> resultList = new ArrayList<>();
 
-        if (districts != null && !districts.isEmpty()) {
-            for (District district : districts) {
-                List<Designer> designersByDistrict = designerService.getListByDistrict(district);
-                resultList.addAll(designersByDistrict);
-            }
-        }
+        List<Designer> filteredDesigners = designerService.getFilteredDesigners(districts, meetingModes, categories);
 
-        if (meetingModes != null && !meetingModes.isEmpty()) {
-            for (MeetingMode meetingMode : meetingModes) {
-                List<Designer> designersByMeetingMode = designerService.getListByMeetingMode(meetingMode);
-                resultList.addAll(designersByMeetingMode);
-            }
-        }
-
-        if (categories != null && !categories.isEmpty()) {
-            for (Specialty category : categories) {
-                List<Designer> designersByCategory = designerService.getDesignerResponseByCategories(category);
-                resultList.addAll(designersByCategory);
-            }
-        }
-
-        List<Designer> pagedResultList = resultList.stream()
+        // 페이징 처리
+        List<Designer> pagedResultList = filteredDesigners.stream()
                 .skip((long) page * size)
                 .limit(size)
                 .collect(Collectors.toList());
 
         return SuccessResponse.of(pagedResultList);
     }
+
 
 
 
