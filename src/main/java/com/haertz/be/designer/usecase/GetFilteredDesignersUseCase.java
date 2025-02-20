@@ -11,13 +11,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @UseCase
 @RequiredArgsConstructor
 public class GetFilteredDesignersUseCase {
 
     private final DesignerService designerService;
 
-    public Page<Designer> execute(MeetingMode meetingMode, District district, Specialty specialty, @NonNull Pageable pageable) {
-        return designerService.getFilteredDesigners(meetingMode, district, specialty, pageable);
+    public Page<Designer> execute(MeetingMode meetingMode, District district, List<Specialty> specialties, @NonNull Pageable pageable) {
+        return designerService.getFilteredDesigners(meetingMode, district, specialties, pageable);
     }
 }

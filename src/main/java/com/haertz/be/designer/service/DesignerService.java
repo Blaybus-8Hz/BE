@@ -39,13 +39,14 @@ public class DesignerService {
         return designerRepository.findAll(pageable);
     }
 
-    public Page<Designer> getFilteredDesigners(MeetingMode meetingMode, District district, Specialty specialty, @NonNull Pageable pageable) {
+    public Page<Designer> getFilteredDesigners(MeetingMode meetingMode, District district, List<Specialty> specialties, @NonNull Pageable pageable) {
         if (meetingMode == MeetingMode.BOTH) {
             throw new BaseException(DesignerErrorCode.INVALID_MEETING_MODE);
         }
 
-        return designerRepository.findFilteredDesigners(meetingMode, district, specialty, pageable);
+        return designerRepository.findFilteredDesigners(meetingMode, district, specialties, pageable);
     }
+
 
 
 }

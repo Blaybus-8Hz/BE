@@ -20,16 +20,17 @@ public interface DesignerRepository extends JpaRepository<Designer, Long> {
 
     Page<Designer> findAll(@NonNull Pageable pageable);
 
-    @Query("SELECT d FROM Designer d WHERE " +
+    @Query("SELECT DISTINCT d FROM Designer d WHERE " +
             "(:meetingMode IS NULL OR d.meetingMode = :meetingMode OR d.meetingMode = 'BOTH') AND " +
             "(:district IS NULL OR d.designerDistrict = :district) AND " +
-            "(:specialty IS NULL OR d.designerSpecialty = :specialty)")
+            "(:specialties IS NULL OR d.designerSpecialty IN :specialties)")
     Page<Designer> findFilteredDesigners(
             @Nullable @Param("meetingMode") MeetingMode meetingMode,
             @Nullable @Param("district") District district,
-            @Nullable @Param("specialty") Specialty specialty,
+            @Nullable @Param("specialties") List<Specialty> specialties,
             Pageable pageable
     );
+
 
     Designer findByDesignerId(Long designerId);
     List<Designer> findByDesignerSpecialty(Specialty specialty);
