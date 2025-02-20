@@ -66,14 +66,14 @@ public class BookingController {
     @Operation(summary = "사용자의 다가오는 예약 내역을 조회합니다.")
     @GetMapping("/current")
     public SuccessResponse<Object> getBookings(){
-        List<Booking> bookingList = bookingService.getCurrentBookings();
+        List<BookingResponse> bookingList = bookingService.getCurrentBookings();
         return SuccessResponse.of(bookingList);
     }
 
     @Operation(summary = "사용자의 지난 예약 내역을 조회합니다.")
     @GetMapping("/past")
     public SuccessResponse<Object> getPastBookings(){
-        List<Booking> bookingList = bookingService.getPastBookings();
+        List<BookingResponse> bookingList = bookingService.getPastBookings();
         return SuccessResponse.of(bookingList);
     }
 }

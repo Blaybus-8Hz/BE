@@ -2,6 +2,7 @@ package com.haertz.be.booking.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.haertz.be.booking.entity.Booking;
 import com.haertz.be.booking.entity.BookingStatus;
 import com.haertz.be.booking.entity.MeetingType;
 import com.haertz.be.payment.entity.PaymentStatus;
@@ -26,6 +27,18 @@ public class BookingResponse {
     private MeetingType meetingType;
     private String requestDetails;
     private String designerName;
+
+    public static BookingResponse from(Booking booking) {
+        return BookingResponse.builder()
+                .bookingDate(booking.getBookingDate())
+                .bookingTime(booking.getBookingTime())
+                .bookingStatus(booking.getBookingStatus())
+                .paymentStatus(booking.getPaymentStatus())
+                .meetingType(booking.getMeetingType())
+                .requestDetails(booking.getRequestDetails())
+                .designerName(booking.getDesigner() != null ? booking.getDesigner().getDesignerName() : "Unknown") // Lazy Loading 방지
+                .build();
+    }
 }
 
 
