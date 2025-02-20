@@ -22,6 +22,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/designer")
 @RequiredArgsConstructor
@@ -57,7 +60,7 @@ public class DesignerController {
     [필터 조건]
     - meetingMode(대면/비대면 여부): REMOTE(비대면), FACE_TO_FACE(대면)
     - district(지역): SEOUL_ALL, GANGNAM_CHUNGDAM_APGUJUNG, HONGDAE_YEONNAM_HAPJEONG, SEONGSU_GUNDAE
-    - specialty(전문 분야): DYEING, BLEACH, PERM
+    - categories(전문 분야): DYEING, BLEACH, PERM (쉼표로 구분하여 다중 선택 가능)
     """)
     @GetMapping("/filter")
     public SuccessResponse<Page<Designer>> getFilteredDesigners(
@@ -67,8 +70,8 @@ public class DesignerController {
             @Parameter(name = "district", description = "지역 필터", example = "SEOUL_ALL")
             @RequestParam(required = false) District district,
 
-            @Parameter(name = "specialty", description = "전문 분야 (염색, 탈색, 펌 등)", example = "DYEING")
-            @RequestParam(required = false) Specialty specialty,
+            @Parameter(name = "categories", description = "전문 분야 (쉼표로 구분하여 다중 선택 가능)", example = "DYEING,PERM")
+            @RequestParam(required = false) List<String> categories,
 
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -77,10 +80,16 @@ public class DesignerController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
-        Page<Designer> designers = getFilteredDesignersUseCase.execute(meetingMode, district, specialty, pageable);
+        List<Specialty> specialtyList = categories != null
+                ? categories.stream().map(Specialty::valueOf).collect(Collectors.toList())
+                : null;
+
+        Page<Designer> designers = getFilteredDesignersUseCase.execute(meetingMode, district, specialtyList, pageable);
 
         return SuccessResponse.of(designers);
     }
+
+
 
 
 
