@@ -27,6 +27,7 @@ public class BookingResponse {
     private MeetingType meetingType;
     private String requestDetails;
     private Long designerId;
+    private String designerShop;
     private String designerName;
 
     public static BookingResponse from(Booking booking) {
@@ -38,6 +39,7 @@ public class BookingResponse {
                 .meetingType(booking.getMeetingType())
                 .requestDetails(booking.getRequestDetails())
                 .designerId(booking.getDesigner().getDesignerId())
+                .designerShop(booking.getDesigner().getDesignerShop())
                 .designerName(booking.getDesigner() != null ? booking.getDesigner().getDesignerName() : "Unknown") // Lazy Loading 방지
                 .build();
     }
