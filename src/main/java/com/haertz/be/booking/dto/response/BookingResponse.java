@@ -28,6 +28,7 @@ public class BookingResponse {
     private String requestDetails;
     private Long designerId;
     private String designerShop;
+    private String imageUrl;
     private String designerName;
 
     public static BookingResponse from(Booking booking) {
@@ -40,6 +41,7 @@ public class BookingResponse {
                 .requestDetails(booking.getRequestDetails())
                 .designerId(booking.getDesigner().getDesignerId())
                 .designerShop(booking.getDesigner().getDesignerShop())
+                .imageUrl(booking.getDesigner().getImageUrl())
                 .designerName(booking.getDesigner() != null ? booking.getDesigner().getDesignerName() : "Unknown") // Lazy Loading 방지
                 .build();
     }
