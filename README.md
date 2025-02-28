@@ -78,7 +78,7 @@
           <strong>유저 관련</strong><br>
           • 유저 정보 반환 API<br><br>
           <strong>기타</strong><br>
-          • 개발 기획
+          • 백엔드 개발 기획
         </td>
       </tr>
       <tr>
@@ -94,7 +94,7 @@
           • 구글 미트 테스트 API (프로덕션 모드 불가로 테스트 용 API만 개발)<br>
           • 구글 미트 링크 반환 API<br><br>
           <strong>기타</strong><br>
-          • 개발 기획
+          • 백엔드 개발 기획
         </td>
       </tr>
       <tr>
@@ -112,13 +112,15 @@
 
 ## 📚 사용 스택
 
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat&logo=springboot&logoColor=white)
-![Amazon AWS](https://img.shields.io/badge/Amazon%20AWS-232F3E?style=flat&logo=amazonaws&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"> 
 
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white)
-![JPA](https://img.shields.io/badge/JPA-6E4C13?style=flat&logo=hibernate&logoColor=white)
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
+
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white"/> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> 
+
+
+
+
 
 <br>
 <br>
