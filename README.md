@@ -54,41 +54,41 @@
       <tr>
         <td>🖌️ 혜원</td>
         <td>
-          예약 관련<br>
+          <strong>예약 관련</strong><br>
           • 사용자 예약 생성 API<br>
           • 사용자 예약 삭제 API<br><br>
-          인증 및 보안<br>
+          <strong>인증 및 보안</strong><br>
           • 구글 소셜 회원가입 및 로그인 API<br>
           • 백엔드 서버 배포 (AWS, 서브도메인 연결, ALB(HTTPS 적용), 도커 컨테이너화)<br><br>
-          디자이너 관련<br>
+          <strong>디자이너 관련</strong><br>
           • 디자이너 필터링 조회 API<br>
           • 디자이너별 예약 가능 날짜 및 시간 반환 API<br><br>
-          유저 관련<br>
+          <strong>유저 관련</strong><br>
           • 유저 정보 반환 API<br><br>
-          기타<br>
+          <strong>기타</strong><br>
           • 개발 기획
         </td>
       </tr>
       <tr>
         <td>🖍️ 희민</td>
         <td>
-          결제 관련<br>
+          <strong>결제 관련</strong><br>
           • 카카오페이 결제 및 환불 API<br>
           • 계좌 이체 및 환불 API<br>
           • 사용자 결제 취소 API<br><br>
-          예약 관련<br>
+          <strong>예약 관련</strong><br>
           • 사용자 예약 내역 조회 API<br><br>
-          구글미트 관련<br>
+          <strong>구글미트 관련</strong><br>
           • 구글 미트 테스트 API (프로덕션 모드 불가로 테스트 용 API만 개발)<br>
           • 구글 미트 링크 반환 API<br><br>
-          기타<br>
+          <strong>기타</strong><br>
           • 개발 기획
         </td>
       </tr>
       <tr>
         <td>🖊️ 한비</td>
         <td>
-          디자이너 관련<br>
+          <strong>디자이너 관련</strong><br>
           • 디자이너 상세 조회 API
         </td>
       </tr>
