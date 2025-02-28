@@ -64,7 +64,7 @@
     </thead>
     <tbody>
       <tr>
-        <td>🖌️ 혜원</td>
+        <td>🖌️ <a href="https://github.com/JSHWJ">혜원<a></td>
         <td>
           <strong>예약 관련</strong><br>
           • 사용자 예약 생성 API<br>
@@ -82,7 +82,7 @@
         </td>
       </tr>
       <tr>
-        <td>🖍️ 희민</td>
+        <td>🖍️ <a href="https://github.com/byunhm02">희민</a></td>
         <td>
           <strong>결제 관련</strong><br>
           • 카카오페이 결제 및 환불 API<br>
@@ -98,7 +98,7 @@
         </td>
       </tr>
       <tr>
-        <td>🖊️ 한비</td>
+        <td>🖊️ <a href="https://github.com/bibisam06">한비</a></td>
         <td>
           <strong>디자이너 관련</strong><br>
           • 디자이너 상세 조회 API
